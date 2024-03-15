@@ -38,3 +38,6 @@ out/
 
 ### SECRET KEY INFO
 application-DB.properties
+
+### .DS_Store
+.DS_Store

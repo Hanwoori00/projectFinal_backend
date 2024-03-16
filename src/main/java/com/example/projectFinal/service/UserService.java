@@ -11,21 +11,25 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
 
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public void SignUp(UserDto.SignUpDto signUpDto){
+    public User SignUp(UserDto.RegisterDto registerDto){
         User user = new User();
-        user.setUserId(signUpDto.getUserId());
-        user.setPassword(signUpDto.getPassword());
-        user.setEmail(signUpDto.getEmail());
-        user.setNickname(signUpDto.getNickname());
+        user.setUserId(registerDto.getUserId());
+        String encryptPw = bCryptPasswordEncoder.encode(registerDto.getPassword());
+        System.out.println("암호화 비밀번호" + encryptPw);
+        user.setPassword(encryptPw);
+        user.setEmail(registerDto.getEmail());
+        user.setNickname(registerDto.getNickname());
         User result = userRepository.save(user);
-        System.out.println(result);
+        System.out.println("회원가입 결과"+ result);
+        return result;
     }
 
 }

@@ -32,4 +32,13 @@ public class UserService {
         return result;
     }
 
+    public boolean CheckDupId(String UserId){
+        return this.userRepository.existsByUserId(UserId);
+
+    }
+
+    public boolean CheckDupNick(String Nickname){
+        return this.userRepository.existsByNickname(Nickname);
+    }
+
 }

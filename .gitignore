@@ -38,6 +38,7 @@ out/
 
 ### SECRET KEY INFO
 application-DB.properties
+application-cloud.properties
 
 ### .DS_Store
 .DS_Store

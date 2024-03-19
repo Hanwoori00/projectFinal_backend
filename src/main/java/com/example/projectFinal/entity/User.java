@@ -34,7 +34,7 @@ public class User {
     private String profileImg;
 
     @Column(name = "refresh_key")
-    private String refreshKey;
+    private String refresh_key;
 
     @Column(name = "room_id")
     private String roomId;

@@ -41,6 +41,4 @@ public class UserController {
         System.out.println(image);
         System.out.println(this.s3Service.upload(image));
     }
-
-
 }

@@ -1,5 +1,6 @@
 package com.example.projectFinal.repository;
 
+import com.example.projectFinal.dto.UserDto;
 import com.example.projectFinal.entity.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,4 +21,8 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Modifying
     @Query("UPDATE User e SET e.refresh_key = null WHERE e.userId = :id")
     void RefreshTokenToNull(@Param("id") String userId);
+
+    @Transactional
+    @Query("SELECT u FROM User u WHERE u.refresh_key = :refreshToken")
+    User findNicknameFromToken(@Param("refreshToken") String refreshToken);
 }

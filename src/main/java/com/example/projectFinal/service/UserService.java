@@ -96,11 +96,26 @@ public class UserService {
         // 액세스 토큰 유효 검증
         UserDto.ResDto result = tokenProvider.validateAndGetUserId(accessToken);
         System.out.println("액세스 토큰 확인" + result.isResult() + result.getMsg());
+        if(result.isResult()){
+            System.out.println("토큰 유효");
+            authuserDto.setResult(result.isResult());
+            authuserDto.setNickname(result.getMsg());
+            return authuserDto;
+        }
 
         UserDto.ResDto result1 = tokenProvider.validateAndGetUserId(RefreshToken);
-        System.out.println("리프레시 토큰 확인" + result1.isResult());
+        if(!result.isResult() && !result1.isResult()){
+            authuserDto.setResult(result1.isResult());
+            return authuserDto;
+        }
 
-        authuserDto.setResult(result.isResult());
+        User Userinfo = this.userRepository.findNicknameFromToken(RefreshToken);
+
+        authuserDto.setResult(result1.isResult());
+        authuserDto.setNickname(Userinfo.getNickname());
+        authuserDto.setUserId(Userinfo.getUserId());
+
+        System.out.println("리프레시 토큰 인증 후 response" + authuserDto);
 
         return authuserDto;
 
@@ -109,6 +124,7 @@ public class UserService {
 
     public boolean CheckDupId(String UserId){
         return this.userRepository.existsByUserId(UserId);
+
     }
 
     public boolean CheckDupNick(String Nickname){

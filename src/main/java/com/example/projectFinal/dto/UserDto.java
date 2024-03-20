@@ -64,6 +64,10 @@ public class UserDto {
         private boolean result;
 
         @Nullable private String nickname;
+
+        @Nullable private String UserId;
+
+        @Nullable private String NewToken;
     }
 
     @Getter
@@ -95,7 +99,7 @@ public class UserDto {
     public static class TokenDto{
         private String accessToken;
 
-        private String refreshToken;
+        @Nullable private String refreshToken;
     }
 
 }

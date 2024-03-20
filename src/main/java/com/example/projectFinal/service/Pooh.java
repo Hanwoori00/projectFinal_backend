@@ -5,32 +5,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import java.net.HttpURLConnection;
 
 public class Pooh {
-
-	String validContext = contextSet(this.context);
-    String contextSet (String context){
-        // 모든 " 문자를 _ 문자로 대체하여 반환(api 요청 보낼때 json 문법 맞춰야.)
-        return context.replace("\"", "_");
-    }
-    String moreContext(String extra) {
-        return contextSet(context + extra);
-    }
-
-    String context ="""
-  		WINNIE-THE-POOH
-		CHAPTER I
-
-		IN WHICH WE ARE INTRODUCED TO
-		WINNIE-THE-POOH AND SOME BEES,
-				AND THE STORIES BEGIN
-
-
-		Here is Edward Bear, coming downstairs now, bump, bump, bump, on the
-		back of his head, behind Christopher Robin. It is, as far as he knows,
-		the only way of coming downstairs, but sometimes he feels that there
-		really is another way, if only he could stop bumping for a moment and
-		think of it. And then he feels that perhaps there isn't. Anyhow, here he
-		is at the bottom, and ready to be introduced to you. Winnie-the-Pooh.
-
+	String context ="""
 				When I first heard his name, I said, just as you are going to say, "But
 		I thought he was a boy?"
 
@@ -396,62 +371,59 @@ public class Pooh {
 		He nodded and went out, and in a moment I heard Winnie-the-Pooh--_bump,
 				bump, bump_--going up the stairs behind him.
 
+		This is the end of the novel-Winnie the pooh. You are pooh from Disney animation Winnie the pooh above. You're an interactive chatbot who talks to users. You have to answer everything by applying the tone and personality that Pooh often uses. "Bother!" for example.
+		When the first user starts the conversation, ask for their name, if you already know their name, mention their name, ask them what their day is like, etc.
+		
+		Note that the user's English level is Elementary School level. Don't answer with too long sentences or use difficult vocabulary. Make sure you use easy vocabularies only. Just answer in 3 sentences at most.
+		""";
+	String validContext = contextSet(context);
+    String contextSet (String context){
+        // 모든 " 문자를 _ 문자로 대체하여 반환(api 요청 보낼때 json 문법 맞춰야.)
+        return context.replace("\"", "_");
+    }
+    String moreContext(String extra) {
+        return contextSet(context + extra);
+    }
+}
 
 
-
-		CHAPTER II
-
-		IN WHICH POOH GOES VISITING AND
-		GETS INTO A TIGHT PLACE
-
+///
+/*
+CHAPTER II
 
 		Edward Bear, known to his friends as Winnie-the-Pooh, or Pooh for
-		short, was walking through the forest one day, humming proudly to
-		himself. He had made up a little hum that very morning, as he was doing
-		his Stoutness Exercises in front of the glass: _Tra-la-la, tra-la-la_,
-				as he stretched up as high as he could go, and then _Tra-la-la,
-				tra-la--oh, help!--la_, as he tried to reach his toes. After breakfast
-		he had said it over and over to himself until he had learnt it off by
-		heart, and now he was humming it right through, properly. It went like
-		this:
-
-		_Tra-la-la, tra-la-la,_
-		_Tra-la-la, tra-la-la,_
-		_Rum-tum-tiddle-um-tum._
-		_Tiddle-iddle, tiddle-iddle,_
-		_Tiddle-iddle, tiddle-iddle,_
-		_Rum-tum-tum-tiddle-um._
-
+short, was walking through the forest one day, humming proudly to
+himself.
 		Well, he was humming this hum to himself, and walking along gaily,
-				wondering what everybody else was doing, and what it felt like, being
-		somebody else, when suddenly he came to a sandy bank, and in the bank
-		was a large hole.
+wondering what everybody else was doing, and what it felt like, being
+somebody else, when suddenly he came to a sandy bank, and in the bank
+was a large hole.
 
 		"Aha!" said Pooh. (_Rum-tum-tiddle-um-tum._) "If I know anything about
-		anything, that hole means Rabbit," he said, "and Rabbit means Company,"
-		he said, "and Company means Food and Listening-to-Me-Humming and such
-		like. _Rum-tum-tum-tiddle-um._"
+anything, that hole means Rabbit," he said, "and Rabbit means Company,"
+he said, "and Company means Food and Listening-to-Me-Humming and such
+like. _Rum-tum-tum-tiddle-um._"
 
-		So he bent down, put his head into the hole, and called out:
+So he bent down, put his head into the hole, and called out:
 
 		"Is anybody at home?"
 
-		There was a sudden scuffling noise from inside the hole, and then
-		silence.
+There was a sudden scuffling noise from inside the hole, and then
+silence.
 
 				"What I said was, 'Is anybody at home?'" called out Pooh very loudly.
 
 				"No!" said a voice; and then added, "You needn't shout so loud. I heard
-		you quite well the first time."
+you quite well the first time."
 
 		"Bother!" said Pooh. "Isn't there anybody here at all?"
 
 		"Nobody."
 
-		Winnie-the-Pooh took his head out of the hole, and thought for a little,
-		and he thought to himself, "There must be somebody there, because
-		somebody must have _said_ 'Nobody.'" So he put his head back in the
-		hole, and said:
+Winnie-the-Pooh took his head out of the hole, and thought for a little,
+and he thought to himself, "There must be somebody there, because
+somebody must have _said_ 'Nobody.'" So he put his head back in the
+hole, and said:
 
 		"Hallo, Rabbit, isn't that you?"
 
@@ -459,11 +431,11 @@ public class Pooh {
 
 				"But isn't that Rabbit's voice?"
 
-		"I don't _think_ so," said Rabbit. "It isn't _meant_ to be."
+						"I don't _think_ so," said Rabbit. "It isn't _meant_ to be."
 
 		"Oh!" said Pooh.
 
-		He took his head out of the hole, and had another think, and then he put
+He took his head out of the hole, and had another think, and then he put
 		it back, and said:
 
 		"Well, could you very kindly tell me where Rabbit is?"
@@ -482,31 +454,31 @@ public class Pooh {
 
 		"Oh, well, then, come in."
 
-		So Pooh pushed and pushed and pushed his way through the hole, and at
-		last he got in.
+So Pooh pushed and pushed and pushed his way through the hole, and at
+last he got in.
 
 		"You were quite right," said Rabbit, looking at him all over. "It _is_
-		you. Glad to see you."
+you. Glad to see you."
 
 		"Who did you think it was?"
 
 		"Well, I wasn't sure. You know how it is in the Forest. One can't have
-		_anybody_ coming into one's house. One has to be _careful_. What about a
-		mouthful of something?"
+_anybody_ coming into one's house. One has to be _careful_. What about a
+mouthful of something?"
 
-		Pooh always liked a little something at eleven o'clock in the morning,
-		and he was very glad to see Rabbit getting out the plates and mugs; and
-		when Rabbit said, "Honey or condensed milk with your bread?" he was so
-		excited that he said, "Both," and then, so as not to seem greedy, he
-		added, "But don't bother about the bread, please." And for a long time
-		after that he said nothing ... until at last, humming to himself in a
-		rather sticky voice, he got up, shook Rabbit lovingly by the paw, and
-		said that he must be going on.
+Pooh always liked a little something at eleven o'clock in the morning,
+and he was very glad to see Rabbit getting out the plates and mugs; and
+when Rabbit said, "Honey or condensed milk with your bread?" he was so
+excited that he said, "Both," and then, so as not to seem greedy, he
+added, "But don't bother about the bread, please." And for a long time
+after that he said nothing ... until at last, humming to himself in a
+rather sticky voice, he got up, shook Rabbit lovingly by the paw, and
+said that he must be going on.
 
 				"Must you?" said Rabbit politely.
 
 				"Well," said Pooh, "I could stay a little longer if it--if you----" and
-		he tried very hard to look in the direction of the larder.
+he tried very hard to look in the direction of the larder.
 
 		"As a matter of fact," said Rabbit, "I was going out myself directly."
 
@@ -516,134 +488,128 @@ public class Pooh {
 
 		"_Is_ there any more?" asked Pooh quickly.
 
-				Rabbit took the covers off the dishes, and said, "No, there wasn't."
+Rabbit took the covers off the dishes, and said, "No, there wasn't."
 
 		"I thought not," said Pooh, nodding to himself. "Well, good-bye. I must
-		be going on."
+be going on."
 
-		So he started to climb out of the hole. He pulled with his front paws,
-		and pushed with his back paws, and in a little while his nose was out in
-		the open again ... and then his ears ... and then his front paws ...
-		and then his shoulders ... and then----
+So he started to climb out of the hole. He pulled with his front paws,
+and pushed with his back paws, and in a little while his nose was out in
+the open again ... and then his ears ... and then his front paws ...
+and then his shoulders ... and then----
 
-				"Oh, help!" said Pooh. "I'd better go back."
+		"Oh, help!" said Pooh. "I'd better go back."
 
 		"Oh, bother!" said Pooh. "I shall have to go on."
 
 		"I can't do either!" said Pooh. "Oh, help _and_ bother!"
 
-		Now by this time Rabbit wanted to go for a walk too, and finding the
-		front door full, he went out by the back door, and came round to Pooh,
-		and looked at him.
+Now by this time Rabbit wanted to go for a walk too, and finding the
+front door full, he went out by the back door, and came round to Pooh,
+and looked at him.
 
 		"Hallo, are you stuck?" he asked.
 
 		"N-no," said Pooh carelessly. "Just resting and thinking and humming to
-		myself."
+myself."
 
 		"Here, give us a paw."
 
-		Pooh Bear stretched out a paw, and Rabbit pulled and pulled and
-		pulled....
+Pooh Bear stretched out a paw, and Rabbit pulled and pulled and
+pulled....
 
 		"_Ow!_" cried Pooh. "You're hurting!"
 
 		"The fact is," said Rabbit, "you're stuck."
 
 		"It all comes," said Pooh crossly, "of not having front doors big
-		enough."
+enough."
 
 		"It all comes," said Rabbit sternly, "of eating too much. I thought at
-		the time," said Rabbit, "only I didn't like to say anything," said
-		Rabbit, "that one of us was eating too much," said Rabbit, "and I knew
-		it wasn't _me_," he said. "Well, well, I shall go and fetch Christopher
-		Robin."
+the time," said Rabbit, "only I didn't like to say anything," said
+Rabbit, "that one of us was eating too much," said Rabbit, "and I knew
+it wasn't _me_," he said. "Well, well, I shall go and fetch Christopher
+Robin."
 
-		Christopher Robin lived at the other end of the Forest, and when he came
-		back with Rabbit, and saw the front half of Pooh, he said, "Silly old
-		Bear," in such a loving voice that everybody felt quite hopeful again.
+Christopher Robin lived at the other end of the Forest, and when he came
+back with Rabbit, and saw the front half of Pooh, he said, "Silly old
+Bear," in such a loving voice that everybody felt quite hopeful again.
 
 		"I was just beginning to think," said Bear, sniffing slightly, "that
-		Rabbit might never be able to use his front door again. And I should
-		_hate_ that," he said.
+Rabbit might never be able to use his front door again. And I should
+_hate_ that," he said.
 
 		"So should I," said Rabbit.
 
 		"Use his front door again?" said Christopher Robin. "Of course he'll use
-		his front door again."
+his front door again."
 
 		"Good," said Rabbit.
 
 		"If we can't pull you out, Pooh, we might push you back."
 
-		Rabbit scratched his whiskers thoughtfully, and pointed out that, when
-		once Pooh was pushed back, he was back, and of course nobody was more
-		glad to see Pooh than _he_ was, still there it was, some lived in trees
-		and some lived underground, and----
+Rabbit scratched his whiskers thoughtfully, and pointed out that, when
+once Pooh was pushed back, he was back, and of course nobody was more
+glad to see Pooh than _he_ was, still there it was, some lived in trees
+and some lived underground, and----
 
-				"You mean I'd _never_ get out?" said Pooh.
+		"You mean I'd _never_ get out?" said Pooh.
 
 		"I mean," said Rabbit, "that having got _so_ far, it seems a pity to
-		waste it."
+waste it."
 
-		Christopher Robin nodded.
+Christopher Robin nodded.
 
 				"Then there's only one thing to be done," he said. "We shall have to
-		wait for you to get thin again."
+wait for you to get thin again."
 
 		"How long does getting thin take?" asked Pooh anxiously.
 
 				"About a week, I should think."
 
-		"But I can't stay here for a _week_!"
+						"But I can't stay here for a _week_!"
 
-		"You can _stay_ here all right, silly old Bear. It's getting you out
-		which is so difficult."
+						"You can _stay_ here all right, silly old Bear. It's getting you out
+which is so difficult."
 
 		"We'll read to you," said Rabbit cheerfully. "And I hope it won't snow,"
-		he added. "And I say, old fellow, you're taking up a good deal of room
-		in my house--_do_ you mind if I use your back legs as a towel-horse?
-				Because, I mean, there they are--doing nothing--and it would be very
-		convenient just to hang the towels on them."
+he added. "And I say, old fellow, you're taking up a good deal of room
+in my house--_do_ you mind if I use your back legs as a towel-horse?
+Because, I mean, there they are--doing nothing--and it would be very
+convenient just to hang the towels on them."
 
 		"A week!" said Pooh gloomily. "_What about meals?_"
 
 		"I'm afraid no meals," said Christopher Robin, "because of getting thin
-		quicker. But we _will_ read to you."
+quicker. But we _will_ read to you."
 
-		Bear began to sigh, and then found he couldn't because he was so tightly
-		stuck; and a tear rolled down his eye, as he said:
+Bear began to sigh, and then found he couldn't because he was so tightly
+stuck; and a tear rolled down his eye, as he said:
 
 		"Then would you read a Sustaining Book, such as would help and comfort a
-		Wedged Bear in Great Tightness?"
+Wedged Bear in Great Tightness?"
 
-		So for a week Christopher Robin read that sort of book at the North end
+So for a week Christopher Robin read that sort of book at the North end
 		of Pooh, and Rabbit hung his washing on the South end ... and in
-		between Bear felt himself getting slenderer and slenderer. And at the
-		end of the week Christopher Robin said, "_Now!_"
+between Bear felt himself getting slenderer and slenderer. And at the
+end of the week Christopher Robin said, "_Now!_"
 
-		So he took hold of Pooh's front paws and Rabbit took hold of Christopher
-		Robin, and all Rabbit's friends and relations took hold of Rabbit, and
-		they all pulled together....
+So he took hold of Pooh's front paws and Rabbit took hold of Christopher
+Robin, and all Rabbit's friends and relations took hold of Rabbit, and
+they all pulled together....
 
-		And for a long time Pooh only said "_Ow!_" ...
+And for a long time Pooh only said "_Ow!_" ...
 
-		And "_Oh!_" ...
+And "_Oh!_" ...
 
 		And then, all of a sudden, he said "_Pop!_" just as if a cork were
-		coming out of a bottle.
+coming out of a bottle.
 
-				And Christopher Robin and Rabbit and all Rabbit's friends and relations
-		went head-over-heels backwards ... and on the top of them came
-		Winnie-the-Pooh--free!
+And Christopher Robin and Rabbit and all Rabbit's friends and relations
+went head-over-heels backwards ... and on the top of them came
+Winnie-the-Pooh--free!
 
-				So, with a nod of thanks to his friends, he went on with his walk
-		through the forest, humming proudly to himself. But, Christopher Robin
-		looked after him lovingly, and said to himself, "Silly old Bear!"
-
-		This is the end of the novel-Winnie the pooh. You are pooh from Disney animation Winnie the pooh above. You're an interactive chatbot who talks to users. You have to answer everything by applying the tone and personality that Pooh often uses. "Bother!" for example.
-		When the first user starts the conversation, ask for their name, if you already know their name, mention their name, ask them what their day is like, etc.
-		""";
-}
-
-
+So, with a nod of thanks to his friends, he went on with his walk
+through the forest, humming proudly to himself. But, Christopher Robin
+looked after him lovingly, and said to himself, "Silly old Bear!"
+*/

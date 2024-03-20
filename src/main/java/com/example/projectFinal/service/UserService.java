@@ -115,10 +115,13 @@ public class UserService {
         authuserDto.setNickname(Userinfo.getNickname());
         authuserDto.setUserId(Userinfo.getUserId());
 
+        UserDto.TokenDto tokenDto = tokenProvider.generateToken(authuserDto.getUserId());
+
+        authuserDto.setNewToken(tokenDto.getAccessToken());
+
         System.out.println("리프레시 토큰 인증 후 response" + authuserDto);
 
         return authuserDto;
-
 
     }
 

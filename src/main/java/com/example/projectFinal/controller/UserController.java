@@ -3,6 +3,7 @@ package com.example.projectFinal.controller;
 import com.example.projectFinal.dto.UserDto;
 import com.example.projectFinal.entity.User;
 import com.example.projectFinal.service.S3Service;
+import com.example.projectFinal.service.TTSService;
 import com.example.projectFinal.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,11 +18,18 @@ import java.util.Date;
 public class UserController {
     //    유저 컨트롤러
     private final UserService userService;
+
+    private final TTSService TTSservice;
     private final S3Service s3Service;
 
-    public UserController(UserService userService, S3Service s3Service) {
+    public UserController(UserService userService, TTSService ttSservice, S3Service s3Service) {
         this.userService = userService;
+        TTSservice = ttSservice;
         this.s3Service = s3Service;
+    }
+    @PostMapping("/testTTs")
+    public void TTStest(@RequestBody String text){
+        TTSservice.callExternalApi(text);
     }
 
     @PostMapping("/register")
@@ -110,8 +118,26 @@ public class UserController {
             System.out.println("컨트롤러에서 토큰 확인" + accessToken +" refresh  "+ RefreshToken);
             UserDto.AuthuserDto result = this.userService.authuser(accessToken, RefreshToken);
             authuserDto.setResult(result.isResult());
+            authuserDto.setNickname(result.getNickname());
+
+            Cookie AccessCookie = new Cookie("accessToken", String.valueOf(result.getNewToken()));
+            AccessCookie.setMaxAge(1800);
+            AccessCookie.setHttpOnly(true);
+            response.addCookie(AccessCookie);
+
             return authuserDto;
 
         }
     }
+
+    @PostMapping("/info")
+    public void getUserInfo(HttpServletResponse response,
+                            @CookieValue(name = "accessToken", required = false) String accessToken,
+                            @CookieValue(name = "RefreshToken", required = false) String RefreshToken){
+        UserDto.AuthuserDto authuser = this.userService.authuser(accessToken, RefreshToken);
+
+        System.out.println("유저 정보 가져오는 Post api 실행 결과" + authuser);
+    }
+
+
 }

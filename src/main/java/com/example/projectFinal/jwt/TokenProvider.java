@@ -50,7 +50,7 @@ public class TokenProvider {
     }
 
     //validateAndGetUserId(): 토근 디코딩 및 파싱하고 토큰 위조 여부 확인 -> 사용자 아이디 리턴
-    public UserDto.ResDto validateAndGetUserId(String token) throws ExpiredJwtException {
+    public UserDto.ResDto validateAndGetUserId(String token) {
         UserDto.ResDto result = new UserDto.ResDto();
 
         try{
@@ -66,7 +66,7 @@ public class TokenProvider {
 
             return result;
 
-        } catch(ExpiredJwtException e){
+        } catch(ExpiredJwtException | IllegalArgumentException e){
             result.setResult(false);
 
             return result;

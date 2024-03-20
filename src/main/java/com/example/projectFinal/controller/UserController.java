@@ -108,7 +108,10 @@ public class UserController {
             return authuserDto;
         } else{
             System.out.println("컨트롤러에서 토큰 확인" + accessToken +" refresh  "+ RefreshToken);
-            return this.userService.authuser(accessToken, RefreshToken);
+            UserDto.AuthuserDto result = this.userService.authuser(accessToken, RefreshToken);
+            authuserDto.setResult(result.isResult());
+            return authuserDto;
+
         }
     }
 }

@@ -109,7 +109,6 @@ public class UserService {
 
     public boolean CheckDupId(String UserId){
         return this.userRepository.existsByUserId(UserId);
-
     }
 
     public boolean CheckDupNick(String Nickname){

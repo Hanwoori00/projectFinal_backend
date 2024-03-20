@@ -24,7 +24,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/").permitAll()
                         .requestMatchers("/chat/**").permitAll()
-                .requestMatchers("/user/**").permitAll()
+                        .requestMatchers("/chat/testPage/**").permitAll()
+                        .requestMatchers("/user/**").permitAll()
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)

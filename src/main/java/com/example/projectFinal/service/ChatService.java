@@ -18,8 +18,13 @@ import java.net.URL;
 @Service
 public class ChatService {
     public String getAnswer(ChatDto chatDto) { // chatDto 의 aiMsg 에 pooh 의 대답을 set 한다.
-        String userMsg = chatDto.getUserMsg();
+		String[] messages = chatDto.getMessages();
+		for (int i = 0; i < messages.length; i++) {
+			System.out.println(i + ") : " +messages[i]);
+		}
 		Pooh pooh = new Pooh();
+		String msgQuery = makeMessagesQuery(messages);
+		System.out.println("--------+++++-----------------" + msgQuery);
 		HttpURLConnection connection = null;
 		try {// Google Cloud의 기본 자격 증명을 사용하여 GoogleCredentials 객체 생성
 			GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
@@ -36,10 +41,11 @@ public class ChatService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} // 여기까지 connection 을 건짐.
+
 		try {
 			// 요청 본문
 			// 변수로부터 값을 가져와 문자열에 삽입
-			String requestBody = "{\"instances\": [{\"context\": \"" + pooh.validContext + "\",\"messages\": [{\"author\": \"user\",\"content\": \"" + chatDto.getUserMsg() + "\"}]}],\"parameters\": {\"temperature\": 0.3,\"maxOutputTokens\": 200,\"topP\": 0.8,\"topK\": 40}}";
+			String requestBody = "{\"instances\": [{\"context\": \"" + pooh.validContext + "\",\"messages\": [" + msgQuery + "]}],\"parameters\": {\"temperature\": 0.3,\"maxOutputTokens\": 200,\"topP\": 0.8,\"topK\": 40}}";
 			//		System.out.println(requestBody);
 			// 요청 보내기
 			if (connection != null){
@@ -72,6 +78,33 @@ public class ChatService {
 		}
 		return chatDto.getAiMsg();
 
+		}
+	private String makeMessagesQuery(String[] messages) {
+		StringBuilder msgQuery = new StringBuilder();
+
+		for (String message : messages) {
+			char messageType = message.charAt(0); // 메시지 타입 ('p' 또는 'u')
+			String content = message.substring(6); // 메시지 내용
+
+			// 메시지 타입에 따라 적절한 문자열 생성 후 msgQuery에 추가
+			if (messageType == 'p') {
+				// 'p'로 시작하는 경우
+				String poohMsg = "{\"author\": \"bot\",\"content\": \"" + content + "\"},";
+				msgQuery.append(poohMsg);
+			} else if (messageType == 'u') {
+				// 'u'로 시작하는 경우
+				String userMsg = "{\"author\": \"user\",\"content\": \"" + content + "\"},";
+				msgQuery.append(userMsg);
+			}
+		}
+
+		// 마지막 쉼표 제거
+		if (msgQuery.length() > 0) {
+			msgQuery.deleteCharAt(msgQuery.length() - 1);
+		}
+
+		return msgQuery.toString();
+	}
 //		[{\"author\": \"user\",\"content\": \"Are my favorite movies based on a book series?\"},{\"author\": \"bot\",\"content\": \"Yes, your favorite movies, The Lord of the Rings and The Hobbit, are based on book series by J.R.R. Tolkien.\"},{\"author\": \"user\",\"content\": \"When were these books published?\"}]
 //String messages = "[]";
 //		Scanner scanner = new Scanner(System.in);
@@ -87,8 +120,6 @@ public class ChatService {
 //
 //		}
 //		scanner.close();
-    }
-
 }
 
 //public static String addMyMsg (String myMsg, String messages) {

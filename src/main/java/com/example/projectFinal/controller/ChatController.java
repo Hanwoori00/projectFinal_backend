@@ -4,12 +4,11 @@ package com.example.projectFinal.controller;
 import com.example.projectFinal.dto.ChatDto;
 import com.example.projectFinal.service.ChatService;
 import com.example.projectFinal.service.Pooh;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/chat")
 public class ChatController {
     private final ChatService chatService;
@@ -18,9 +17,20 @@ public class ChatController {
         this.chatService = chatService;
     }
 
-    @GetMapping("/getAnswer")
+    @PostMapping("/getAnswer")
     @ResponseBody
-    public String GetAnswer(ChatDto chatDto) {
+    public String GetAnswer(@RequestBody ChatDto chatDto) {
         return chatService.getAnswer(chatDto);
+    }
+//    @PostMapping("/createConnection")
+//    @ResponseBody
+//    public String CreateConnection() {
+//        chatService.createConnection();
+//        return "Connection created successfully";
+//    }
+
+    @GetMapping("/testPage")
+    public String RenderPage() {
+        return "test";
     }
 }

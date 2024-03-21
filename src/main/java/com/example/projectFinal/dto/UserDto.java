@@ -102,4 +102,12 @@ public class UserDto {
         @Nullable private String refreshToken;
     }
 
+    @Data
+    public static class sendChatDto{
+        private String nickname;
+        private String userMsg;
+        private String Aimsg;
+        private String result;
+    }
+
 }

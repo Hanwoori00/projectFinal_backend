@@ -2,8 +2,6 @@ package com.example.projectFinal.dto;
 
 import lombok.Data;
 
-import java.net.HttpURLConnection;
-
 @Data
 public class ChatDto {
 

@@ -1,7 +1,9 @@
 package com.example.projectFinal.controller;
 
+import com.example.projectFinal.dto.ChatDto;
 import com.example.projectFinal.dto.UserDto;
 import com.example.projectFinal.entity.User;
+import com.example.projectFinal.service.ChatService;
 import com.example.projectFinal.service.S3Service;
 import com.example.projectFinal.service.TTSService;
 import com.example.projectFinal.service.UserService;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 
 @RestController
@@ -24,10 +27,13 @@ public class UserController {
     private final TTSService TTSservice;
     private final S3Service s3Service;
 
-    public UserController(UserService userService, TTSService ttSservice, S3Service s3Service) {
+    private final ChatService chatService;
+
+    public UserController(UserService userService, TTSService ttSservice, S3Service s3Service, ChatService chatService) {
         this.userService = userService;
         TTSservice = ttSservice;
         this.s3Service = s3Service;
+        this.chatService = chatService;
     }
     @PostMapping("/testTTs")
     public void TTStest(@RequestBody String text) throws UnsupportedAudioFileException, IOException {
@@ -139,6 +145,30 @@ public class UserController {
         UserDto.AuthuserDto authuser = this.userService.authuser(accessToken, RefreshToken);
 
         System.out.println("유저 정보 가져오는 Post api 실행 결과" + authuser);
+    }
+
+    @PostMapping("/sendChat")
+    public void sendChat(@CookieValue(name = "accessToken", required = false) String accessToken,
+                                        @CookieValue(name = "RefreshToken", required = false) String RefreshToken,
+                                        @RequestBody String messages){
+        UserDto.AuthuserDto authuser = this.userService.authuser(accessToken, RefreshToken);
+        System.out.println("토큰 검증" + authuser.getUserId() + authuser.getNickname());
+
+        ChatDto chatDto = new ChatDto();
+
+        chatDto.setMessages(new String[]{messages});
+
+        String chatDto1 = this.chatService.getAnswer(chatDto);
+
+        System.out.println("푸 답변" + chatDto1);
+
+        try {
+            TTSservice.callExternalApi(chatDto1);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (UnsupportedAudioFileException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

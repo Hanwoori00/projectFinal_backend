@@ -7,9 +7,11 @@ import com.example.projectFinal.service.TTSService;
 import com.example.projectFinal.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import kong.unirest.HttpResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.util.Date;
 
@@ -28,7 +30,7 @@ public class UserController {
         this.s3Service = s3Service;
     }
     @PostMapping("/testTTs")
-    public void TTStest(@RequestBody String text){
+    public void TTStest(@RequestBody String text) throws UnsupportedAudioFileException, IOException {
         TTSservice.callExternalApi(text);
     }
 

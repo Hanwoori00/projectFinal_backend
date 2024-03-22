@@ -148,22 +148,29 @@ public class UserController {
     }
 
     @PostMapping("/sendChat")
-    public void sendChat(@CookieValue(name = "accessToken", required = false) String accessToken,
+    public UserDto.SendChatDto sendChat(@CookieValue(name = "accessToken", required = false) String accessToken,
                                         @CookieValue(name = "RefreshToken", required = false) String RefreshToken,
-                                        @RequestBody String messages){
-        UserDto.AuthuserDto authuser = this.userService.authuser(accessToken, RefreshToken);
-        System.out.println("토큰 검증" + authuser.getUserId() + authuser.getNickname());
-
-        ChatDto chatDto = new ChatDto();
-
-        chatDto.setMessages(new String[]{messages});
-
-        String chatDto1 = this.chatService.getAnswer(chatDto);
-
-        System.out.println("푸 답변" + chatDto1);
+                                        @RequestBody ChatDto chatDto){
+        UserDto.SendChatDto sendChatDto = new UserDto.SendChatDto();
 
         try {
-            TTSservice.callExternalApi(chatDto1);
+            UserDto.AuthuserDto authuser = this.userService.authuser(accessToken, RefreshToken);
+            System.out.println("토큰 검증" + authuser.getUserId() + authuser.getNickname());
+
+            chatDto.setMessages(chatDto.getMessages());
+
+            String aimsg = this.chatService.getAnswer(chatDto);
+
+            System.out.println("푸 답변" + aimsg);
+
+            TTSservice.callExternalApi(aimsg);
+
+            sendChatDto.setAimsg(aimsg);
+            sendChatDto.setNickname(authuser.getNickname());
+            sendChatDto.setResult(true);
+            sendChatDto.setUserMsg(chatDto.getUserMsg());
+
+            return sendChatDto;
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (UnsupportedAudioFileException e) {

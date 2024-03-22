@@ -103,11 +103,11 @@ public class UserDto {
     }
 
     @Data
-    public static class sendChatDto{
+    public static class SendChatDto{
         private String nickname;
         private String userMsg;
         private String Aimsg;
-        private String result;
+        private boolean result;
     }
 
 }

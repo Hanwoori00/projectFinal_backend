@@ -77,17 +77,21 @@ public class UserController {
         AccessCookie.setMaxAge(1800);
         AccessCookie.setHttpOnly(true);
         AccessCookie.setPath("/");
-        AccessCookie.setAttribute("samesite", "lax");
+        AccessCookie.setAttribute("SameSite", "Lax");
         response.addCookie(AccessCookie);
 
         Cookie Refreshcookie = new Cookie("RefreshToken", String.valueOf(result.getRefreshToken()));
         Refreshcookie.setMaxAge(86400 * 7);
         Refreshcookie.setHttpOnly(true);
         Refreshcookie.setPath("/");
+        Refreshcookie.setAttribute("SameSite", "Lax");
         response.addCookie(Refreshcookie);
 
         realloginResDto.setResult(result.isResult());
         realloginResDto.setMsg(result.getMsg());
+
+        response.flushBuffer();
+
         return realloginResDto;
     }
 

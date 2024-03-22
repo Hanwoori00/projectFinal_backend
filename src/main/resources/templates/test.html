@@ -11,63 +11,106 @@
 <button onclick="sendMessage()">Send</button>
 <!-- 메시지 목록 -->
 <ul id="messageList"></ul>
+<!-- 대화종료 버튼 -->
+<br>
+<hr>
+<button onclick="finishChat()">Finish</button>
+<br>
+<h3>Grammar Check</h3>
+<ul id="messageHistory"></ul>
+
 
 <!-- Axios 라이브러리 추가 -->
+
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
     var messages = [];
 
-<!--    window.onload = function() {-->
-<!--        axios.post('/chat/createConnection')-->
-<!--        .then(function(response) {-->
-<!--            console.log(response.data)})-->
-<!--        .catch(function (error) {-->
-<!--            console.error('에러 발생:', error);-->
-<!--        })-->
-<!--    }-->
+    // window.onload = function() {
+    // 	axios.post('/chat/createConnection')
+    // 	.then(function(response) {
+    // 		console.log(response.data)})
+    // 	.catch(function (error) {
+    // 		console.error('에러 발생:', error);
+    // 	})
+    // }
+    function finishChat() {
+        var messageHistory = document.getElementById('messageHistory');
+        var checkingMsg = document.createElement('li');
+        checkingMsg.textContent = "Grammar Checking...";
+        messageHistory.appendChild(checkingMsg);
 
-    function sendMessage() {
-        // 입력 필드에서 메시지 가져오기
-        var userMsg = document.getElementById('userMsg').value;
-
-        // messages 배열에 사용자가 입력한 메시지 추가
-        messages.push(`user: ${userMsg}`);
-
-        // 화면에 사용자가 입력한 메시지 출력
-        displayMessages();
-
-        // Axios를 사용하여 서버에 POST 요청 보내기
-        axios.post('/chat/getAnswer', {
+        axios.post('/chat/getCorrection', {
             messages: messages
         })
-        .then(function (response) {
-            // 서버 응답 메시지를 messages 배열에 추가
-            var aiMsg = response.data;
-            messages.push(`pooh: ${aiMsg}`);
-            console.log('???????????????????0',messages[0]);
-            console.log('???????????????????1',messages[1]);
-            // 화면에 서버 응답 메시지 출력
-            displayMessages();
+        .then(function(response) {
+            messageHistory.removeChild(checkingMsg);
+
+            var correctCount = 0;
+            var correctedMsg = response.data;
+            correctedMsg.forEach(function(msg) {
+                if (msg.includes('->')) {
+                    var listItem = document.createElement('li');
+                    listItem.textContent = msg;
+                    messageHistory.appendChild(listItem);
+                    correctCount++;
+                }
+            });
+
+            if (correctCount === 0) {
+                var perfectGrammarMsg = document.createElement('li');
+                perfectGrammarMsg.textContent = "Perfect Grammar";
+                messageHistory.appendChild(perfectGrammarMsg);
+            }
         })
         .catch(function (error) {
             console.error('에러 발생:', error);
         });
-
-        // 입력 필드 비우기
-        document.getElementById('userMsg').value = '';
     }
 
-    // messages 배열에 저장된 메시지들을 화면에 출력하는 함수
-    function displayMessages() {
-        var messageList = document.getElementById('messageList');
-        messageList.innerHTML = ''; // 기존 내용 삭제
 
-        messages.forEach(function(message) {
-            var listItem = document.createElement('li');
-            listItem.textContent = message;
-            messageList.appendChild(listItem);
-        });
-    }
+        function sendMessage() {
+            // 입력 필드에서 메시지 가져오기
+            var userMsg = document.getElementById('userMsg').value;
+
+            // messages 배열에 사용자가 입력한 메시지 추가
+            messages.push(`user: ${userMsg}`);
+
+            // 화면에 사용자가 입력한 메시지 출력
+            displayMessages();
+
+            // Axios를 사용하여 서버에 POST 요청 보내기
+            axios.post('/chat/getAnswer', {
+                messages: messages
+            })
+            .then(function (response) {
+                // 서버 응답 메시지를 messages 배열에 추가
+                var aiMsg = response.data;
+                messages.push(`pooh: ${aiMsg}`);
+                console.log('???????????????????0',messages[0]);
+                console.log('???????????????????1',messages[1]);
+                // 화면에 서버 응답 메시지 출력
+                displayMessages();
+            })
+            .catch(function (error) {
+                console.error('에러 발생:', error);
+            });
+
+            // 입력 필드 비우기
+            document.getElementById('userMsg').value = '';
+        }
+
+        // messages 배열에 저장된 메시지들을 화면에 출력하는 함수
+        function displayMessages() {
+            var messageList = document.getElementById('messageList');
+            messageList.innerHTML = ''; // 기존 내용 삭제
+
+            messages.forEach(function(message) {
+                var listItem = document.createElement('li');
+                listItem.textContent = message;
+                messageList.appendChild(listItem);
+            });
+        }
 </script>
 </body>
 </html>

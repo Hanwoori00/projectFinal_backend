@@ -28,7 +28,11 @@ public class ChatController {
 //        chatService.createConnection();
 //        return "Connection created successfully";
 //    }
-
+    @PostMapping("/getCorrection")
+    @ResponseBody
+    public String[] GecCorrection(@RequestBody ChatDto chatDto) {
+        return chatService.getCorrection(chatDto);
+    }
     @GetMapping("/testPage")
     public String RenderPage() {
         return "test";

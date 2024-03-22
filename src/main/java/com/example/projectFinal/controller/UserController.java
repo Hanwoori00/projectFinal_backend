@@ -77,14 +77,14 @@ public class UserController {
         AccessCookie.setMaxAge(1800);
         AccessCookie.setHttpOnly(true);
         AccessCookie.setPath("/");
-        AccessCookie.setAttribute("SameSite", "Lax");
+        AccessCookie.setAttribute("SameSite", "None");
         response.addCookie(AccessCookie);
 
         Cookie Refreshcookie = new Cookie("RefreshToken", String.valueOf(result.getRefreshToken()));
         Refreshcookie.setMaxAge(86400 * 7);
         Refreshcookie.setHttpOnly(true);
         Refreshcookie.setPath("/");
-        Refreshcookie.setAttribute("SameSite", "Lax");
+        Refreshcookie.setAttribute("SameSite", "None");
         response.addCookie(Refreshcookie);
 
         realloginResDto.setResult(result.isResult());
@@ -101,6 +101,7 @@ public class UserController {
         System.out.println("로그아웃 토큰" + token);
         if(token == null){
             resDto.setResult(false);
+            resDto.setMsg("로그인 상태가 아닙니다.");
             return resDto;
         } else{
             System.out.println("토큰 있음");
@@ -111,6 +112,8 @@ public class UserController {
             AccessCookie.setMaxAge(0);
             AccessCookie.setPath("/");
             AccessCookie.setHttpOnly(true);
+            response.addHeader("Access-Control-Allow-Credentials", "true");
+            response.addHeader("Access-Control-Allow-Origin", "*");
             response.addCookie(AccessCookie);
 
             Cookie Refreshcookie = new Cookie("RefreshToken", null);

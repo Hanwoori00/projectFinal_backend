@@ -54,6 +54,7 @@ public class UserService {
         UserDto.LoginResDto result = new UserDto.LoginResDto();
         if(SelectId.isPresent()){
             User user = SelectId.get();
+
 //            비밀번호 일치 여부 확인
             boolean comparePW = bCryptPasswordEncoder.matches(loginDto.getPassword(), user.getPassword());
 

@@ -89,6 +89,13 @@
             .then(function (response) {
                 // 서버 응답 메시지를 messages 배열에 추가
                 var aiMsg = response.data.aimsg;
+                var audio = document.getElementById('myAudio');
+                audio.load();
+                var source = document.createElement('source');
+
+
+updateAudioSource(); // 특정 이벤트 후 함수 호출
+
                 messages.push(`pooh: ${aiMsg}`);
                 console.log('???????????????????0',messages[0]);
                 console.log('???????????????????1',messages[1]);

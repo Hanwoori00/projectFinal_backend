@@ -17,7 +17,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
-
+@CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -72,11 +72,13 @@ public class UserController {
         Cookie AccessCookie = new Cookie("accessToken", String.valueOf(result.getAccessToken()));
         AccessCookie.setMaxAge(1800);
         AccessCookie.setHttpOnly(true);
+        AccessCookie.setPath("/");
         response.addCookie(AccessCookie);
 
         Cookie Refreshcookie = new Cookie("RefreshToken", String.valueOf(result.getRefreshToken()));
         Refreshcookie.setMaxAge(86400 * 7);
         Refreshcookie.setHttpOnly(true);
+        Refreshcookie.setPath("/");
         response.addCookie(Refreshcookie);
         return result;
     }
@@ -95,13 +97,13 @@ public class UserController {
 
             Cookie AccessCookie = new Cookie("accessToken", null);
             AccessCookie.setMaxAge(0);
-            AccessCookie.setPath("/user");
+            AccessCookie.setPath("/");
             AccessCookie.setHttpOnly(true);
             response.addCookie(AccessCookie);
 
             Cookie Refreshcookie = new Cookie("RefreshToken", null);
             Refreshcookie.setMaxAge(0);
-            AccessCookie.setPath("/user");
+            AccessCookie.setPath("/");
             Refreshcookie.setHttpOnly(true);
             response.addCookie(Refreshcookie);
 

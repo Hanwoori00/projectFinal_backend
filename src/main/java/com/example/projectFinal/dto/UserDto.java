@@ -1,12 +1,9 @@
 package com.example.projectFinal.dto;
 
-import com.google.auto.value.AutoValue;
-import jakarta.persistence.Column;
 import lombok.*;
 
 import javax.annotation.Nullable;
 import java.sql.Timestamp;
-import java.util.Optional;
 
 public class UserDto {
 
@@ -108,6 +105,12 @@ public class UserDto {
         private String userMsg;
         private String Aimsg;
         private boolean result;
+    }
+
+    @Data
+    public static class RealloginResDto{
+        private boolean result;
+        private String msg;
     }
 
 }

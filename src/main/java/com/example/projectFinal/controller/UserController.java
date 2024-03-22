@@ -62,10 +62,14 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public UserDto.LoginResDto Login(@RequestBody UserDto.LoginDto loginDto, HttpServletResponse response) throws Exception{
+    public UserDto.RealloginResDto Login(@RequestBody UserDto.LoginDto loginDto, HttpServletResponse response) throws Exception{
+        UserDto.RealloginResDto realloginResDto = new UserDto.RealloginResDto();
+
         UserDto.LoginResDto result = this.userService.Login(loginDto);
         if(!result.isResult()){
-            return result;
+            realloginResDto.setResult(result.isResult());
+            realloginResDto.setMsg(result.getMsg());
+            return realloginResDto;
         }
         long now = (new Date().getTime());
 
@@ -73,6 +77,7 @@ public class UserController {
         AccessCookie.setMaxAge(1800);
         AccessCookie.setHttpOnly(true);
         AccessCookie.setPath("/");
+        AccessCookie.setAttribute("samesite", "lax");
         response.addCookie(AccessCookie);
 
         Cookie Refreshcookie = new Cookie("RefreshToken", String.valueOf(result.getRefreshToken()));
@@ -80,7 +85,10 @@ public class UserController {
         Refreshcookie.setHttpOnly(true);
         Refreshcookie.setPath("/");
         response.addCookie(Refreshcookie);
-        return result;
+
+        realloginResDto.setResult(result.isResult());
+        realloginResDto.setMsg(result.getMsg());
+        return realloginResDto;
     }
 
     @GetMapping("/logout")

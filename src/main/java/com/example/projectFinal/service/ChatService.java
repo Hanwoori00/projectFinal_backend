@@ -17,14 +17,71 @@ import java.net.URL;
 
 @Service
 public class ChatService {
+
+	public String[] getCorrection(ChatDto chatDto) {
+		String[] messages = chatDto.getMessages();
+		CorrectAi ai = new CorrectAi();
+
+		HttpURLConnection connection = null;
+		try {
+			GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
+			String oAuthToken = credentials.refreshAccessToken().getTokenValue();
+			URL url = new URL("https://asia-northeast3-aiplatform.googleapis.com/v1/projects/teampj-final/locations/asia-northeast3/publishers/google/models/text-bison-32k:predict");
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty("Content-Type", "application/json");
+			connection.setRequestProperty("Authorization", "Bearer " + oAuthToken);
+			connection.setDoOutput(true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		String stringifiedMessages = stringifyMessage(messages);
+		try {
+			String requestBody = "{\"instances\":[{\"content\":\"" + ai.context + stringifiedMessages + "\"}],\"parameters\":{\"maxOutputTokens\":8192,\"temperature\":0.1,\"topP\":1}}";
+			if (connection != null) {
+				DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
+				outputStream.writeBytes(requestBody);
+				outputStream.flush();
+				outputStream.close();
+				int responseCode = connection.getResponseCode();
+				System.out.println("Response Code: " + responseCode);
+				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				String inputLine;
+				StringBuilder response = new StringBuilder();
+				while ((inputLine = in.readLine()) != null) {
+					response.append(inputLine);
+				}
+				in.close();
+				// 응답(JSON)중 대답만 골라내기
+				JsonObject jsonResponse = JsonParser.parseString(response.toString()).getAsJsonObject();
+				JsonArray predictions = jsonResponse.getAsJsonArray("predictions");
+				JsonObject firstPrediction = predictions.get(0).getAsJsonObject();
+				String content = firstPrediction.get("content").getAsString();
+				String[] listifiedMessages = content.split("\\n");
+				return listifiedMessages;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (connection != null) {
+				connection.disconnect();
+			}
+		}
+		return null; // 에러 발생 시 null 반환 혹은 다른 방식으로 처리
+	}
+
+	public String stringifyMessage(String[] messages) {
+		StringBuilder result = new StringBuilder();
+		for (String message : messages) {
+			result.append(message).append("\n");
+		}
+		return result.toString();
+	}
+
     public String getAnswer(ChatDto chatDto) { // chatDto 의 aiMsg 에 pooh 의 대답을 set 한다.
 		String[] messages = chatDto.getMessages();
-		for (int i = 0; i < messages.length; i++) {
-			System.out.println(i + ") : " +messages[i]);
-		}
 		Pooh pooh = new Pooh();
 		String msgQuery = makeMessagesQuery(messages);
-		System.out.println("--------+++++-----------------" + msgQuery);
 		HttpURLConnection connection = null;
 		try {// Google Cloud의 기본 자격 증명을 사용하여 GoogleCredentials 객체 생성
 			GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
@@ -105,31 +162,5 @@ public class ChatService {
 
 		return msgQuery.toString();
 	}
-//		[{\"author\": \"user\",\"content\": \"Are my favorite movies based on a book series?\"},{\"author\": \"bot\",\"content\": \"Yes, your favorite movies, The Lord of the Rings and The Hobbit, are based on book series by J.R.R. Tolkien.\"},{\"author\": \"user\",\"content\": \"When were these books published?\"}]
-//String messages = "[]";
-//		Scanner scanner = new Scanner(System.in);
-//		while (true){
-//			System.out.println("무슨 말이든 해보세요");
-//
-//			String messages = scanner.nextLine();
-////			String myMsg = scanner.next();
-////			messages = addMyMsg(myMsg, messages);
-//			if (messages.equals("exit")) break;
-////			if (myMsg.equals("exit")) break;
-//
-//
-//		}
-//		scanner.close();
 }
 
-//public static String addMyMsg (String myMsg, String messages) {
-//	StringBuilder sb = new StringBuilder(messages);
-//	//		[{\"author\": \"user\",\"content\": \"Are my favorite movies based on a book series?\"},{\"author\": \"bot\",\"content\": \"Yes, your favorite movies, The Lord of the Rings and The Hobbit, are based on book series by J.R.R. Tolkien.\"},{\"author\": \"user\",\"content\": \"When were these books published?\"}]
-//	// messages = "[]"; 확인됨.
-//	int point = messages.length();
-//	String newMessages = "{\\\"author\\\": \\\"user\\\",\\\"content\\\": \\\"" + myMsg + "\\\"}" ;
-//	sb.insert(point, newMessages);
-//	//		System.out.print("----------------------------newMsg:");
-//	//		System.out.println(newMessages);
-//	return newMessages;
-//}

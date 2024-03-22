@@ -69,8 +69,6 @@ public class UserService {
 
             userRepository.updateRefreshToken(loginDto.getUserId(), tokenDto.getRefreshToken());
             result.setResult(true);
-            result.setAccessToken(tokenDto.getAccessToken());
-            result.setRefreshToken(tokenDto.getRefreshToken());
             return result;
         } else{
             result.setResult(false);

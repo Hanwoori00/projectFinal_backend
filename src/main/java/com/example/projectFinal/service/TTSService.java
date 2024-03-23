@@ -24,7 +24,7 @@ public class TTSService {
     private String xiApiKey;
 
     private static final int CHUNK_SIZE = 1024;
-    private static final String OUTPUT_PATH = "/Users/jeongwon/projectFinal/src/main/resources/static/pooh.mp3"; // 파일 경로 예제 수정
+    private static final String OUTPUT_PATH = "/Users/jeongwon/projectFinal/src/main/resources/static/pooh.wav"; // 파일 경로 예제 수정
 
     public void callExternalApi(String text) throws IOException, UnsupportedAudioFileException {
         String ttsUrl = "https://api.elevenlabs.io/v1/text-to-speech/xz0fqwiDAuKTI4bPzIKF"; // URL 수정

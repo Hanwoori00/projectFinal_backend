@@ -113,6 +113,9 @@ public class UserService {
         User Userinfo = this.userRepository.findNicknameFromToken(RefreshToken);
 
         authuserDto.setResult(result1.isResult());
+        if(Userinfo.getNickname() != null ){
+            return authuserDto;
+        }
         authuserDto.setNickname(Userinfo.getNickname());
         authuserDto.setUserId(Userinfo.getUserId());
 

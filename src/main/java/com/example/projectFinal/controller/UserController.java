@@ -164,36 +164,4 @@ public class UserController {
         System.out.println("유저 정보 가져오는 Post api 실행 결과" + authuser);
     }
 
-    @PostMapping("/sendChat")
-    public UserDto.SendChatDto sendChat(@CookieValue(name = "accessToken", required = false) String accessToken,
-                                        @CookieValue(name = "RefreshToken", required = false) String RefreshToken,
-                                        @RequestBody ChatDto chatDto){
-        UserDto.SendChatDto sendChatDto = new UserDto.SendChatDto();
-
-        try {
-            UserDto.AuthuserDto authuser = this.userService.authuser(accessToken, RefreshToken);
-            System.out.println("토큰 검증" + authuser.getUserId() + authuser.getNickname());
-
-            chatDto.setMessages(chatDto.getMessages());
-
-            String aimsg = this.chatService.getAnswer(chatDto);
-
-            System.out.println("푸 답변" + aimsg);
-
-            TTSservice.callExternalApi(aimsg);
-
-            sendChatDto.setAimsg(aimsg);
-            sendChatDto.setNickname(authuser.getNickname());
-            sendChatDto.setResult(true);
-            sendChatDto.setUserMsg(chatDto.getUserMsg());
-
-            return sendChatDto;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (UnsupportedAudioFileException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
 }

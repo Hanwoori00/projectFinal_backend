@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
+import java.util.Arrays;
 
 @Controller
 @RequestMapping("/chat")
@@ -59,7 +60,6 @@ public class ChatController {
 
         try {
             UserDto.AuthuserDto authuser = this.userService.authuser(accessToken, RefreshToken);
-            System.out.println("토큰 검증" + authuser.getUserId() + authuser.getNickname());
 
             chatDto.setMessages(chatDto.getMessages());
 
@@ -70,11 +70,16 @@ public class ChatController {
             TTSservice.callExternalApi(aimsg);
 
             sendChatDto.setAimsg(aimsg);
-            sendChatDto.setNickname(authuser.getNickname());
             sendChatDto.setResult(true);
-            sendChatDto.setUserMsg(chatDto.getUserMsg());
+            sendChatDto.setUserMsg(Arrays.toString(chatDto.getMessages()));
 
-            return sendChatDto;
+            if(!authuser.isResult()){
+                return sendChatDto;
+            } else{
+                sendChatDto.setNickname(authuser.getNickname());
+                return sendChatDto;
+            }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (UnsupportedAudioFileException e) {

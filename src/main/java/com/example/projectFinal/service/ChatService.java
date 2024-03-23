@@ -7,10 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -24,7 +21,7 @@ public class ChatService {
 
 		HttpURLConnection connection = null;
 		try {
-			GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
+			GoogleCredentials credentials = GoogleCredentials.fromStream();
 			String oAuthToken = credentials.refreshAccessToken().getTokenValue();
 			URL url = new URL("https://asia-northeast3-aiplatform.googleapis.com/v1/projects/teampj-final/locations/asia-northeast3/publishers/google/models/text-bison-32k:predict");
 			connection = (HttpURLConnection) url.openConnection();
@@ -84,7 +81,7 @@ public class ChatService {
 		String msgQuery = makeMessagesQuery(messages);
 		HttpURLConnection connection = null;
 		try {// Google Cloud의 기본 자격 증명을 사용하여 GoogleCredentials 객체 생성
-			GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
+			GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("/home/ubuntu/.config/gcloud/application_default_credentials.json"));
 			// OAuth 2.0 토큰 얻기
 			String oAuthToken = credentials.refreshAccessToken().getTokenValue();
 			// API 엔드포인트 URL

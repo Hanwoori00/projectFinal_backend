@@ -26,11 +26,11 @@ public class TTSService {
     private static final int CHUNK_SIZE = 1024;
     // 테스트 시 본인의 폴더 경로로 설정
     private static final String JEONGWON_PATH = "/Users/jeongwon/projectFinal/src/main/resources/static/pooh.wav";
-    private static final String SERVER_PATH = "/home/ubuntu/projectFinal/src/main/resources/static/pooh.wav";
+    private static final String SERVER_PATH = "/home/ubuntu/dist/pooh.wav";
 
 
     public void callExternalApi(String text) throws IOException, UnsupportedAudioFileException {
-        String ttsUrl = "https://api.elevenlabs.io/v1/text-to-speech/xz0fqwiDAuKTI4bPzIKF?optimize_streaming_latency=4"; // URL 수정
+        String ttsUrl = "https://api.elevenlabs.io/v1/text-to-speech/xz0fqwiDAuKTI4bPzIKF?optimize_streaming_latency=3"; // URL 수정
 
         // HttpClient 객체 생성
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {

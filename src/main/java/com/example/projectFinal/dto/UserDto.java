@@ -67,30 +67,23 @@ public class UserDto {
         @Nullable private String NewToken;
     }
 
-    @Getter
+    @Data
     @NoArgsConstructor
     public static class GetUserDto{
-        private String userId;
+        private boolean result;
 
-        private String password;
+        private String userId;
 
         private String email;
 
         private String nickname;
 
-        private Timestamp createdAt;
-
-        private Timestamp deletedAt;
-
         private String profileImg;
-
-        private String refresh_key;
 
         private String roomId;
 
     }
 
-    @Builder
     @Data
     @AllArgsConstructor
     public static class TokenDto{

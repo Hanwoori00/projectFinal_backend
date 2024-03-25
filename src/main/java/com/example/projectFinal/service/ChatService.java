@@ -21,7 +21,10 @@ public class ChatService {
 
 		HttpURLConnection connection = null;
 		try {
+			// 서버 용 json 코드
 			GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("/home/ubuntu/.config/gcloud/application_default_credentials.json"));
+			// 로컬 용 테스트 코드
+			//GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
 			String oAuthToken = credentials.refreshAccessToken().getTokenValue();
 			URL url = new URL("https://asia-northeast3-aiplatform.googleapis.com/v1/projects/teampj-final/locations/asia-northeast3/publishers/google/models/text-bison-32k:predict");
 			connection = (HttpURLConnection) url.openConnection();
@@ -81,8 +84,10 @@ public class ChatService {
 		String msgQuery = makeMessagesQuery(messages);
 		HttpURLConnection connection = null;
 		try {// Google Cloud의 기본 자격 증명을 사용하여 GoogleCredentials 객체 생성
+			// 서버 용 json 코드
 			GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("/home/ubuntu/.config/gcloud/application_default_credentials.json"));
-			// OAuth 2.0 토큰 얻기
+			// 로컬 용 테스트 코드
+			//GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();			// OAuth 2.0 토큰 얻기
 			String oAuthToken = credentials.refreshAccessToken().getTokenValue();
 			// API 엔드포인트 URL
 			URL url = new URL("https://asia-northeast3-aiplatform.googleapis.com/v1/projects/teampj-final/locations/asia-northeast3/publishers/google/models/chat-bison:predict");

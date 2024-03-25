@@ -84,6 +84,7 @@ public class UserDto {
 
     }
 
+    @Builder
     @Data
     @AllArgsConstructor
     public static class TokenDto{

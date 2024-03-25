@@ -167,7 +167,7 @@ public class UserController {
                 authuserDto.setNickname("로그인 상태가 아닙니다");
                 return authuserDto;
             } else {
-                System.out.println("컨트롤러에서 토큰 확인" + accessToken + " refresh  " + RefreshToken);
+                System.out.println("컨트롤러에서 쿠키 확인" + accessToken + " refresh  " + RefreshToken);
                 UserDto.AuthuserDto result = this.userService.authuser(accessToken, RefreshToken);
                 authuserDto.setResult(result.isResult());
                 authuserDto.setNickname(result.getNickname());

@@ -21,8 +21,8 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE User SET profile_img = :profileImg WHERE userId = :userId")
-    boolean updateProfileImg(@Param("userId") String userId, @Param("refreshToken") String profileImg);
+    @Query("UPDATE User SET profileImg = :awsurl WHERE userId = :userId")
+    boolean updateProfileImg(@Param("userId") String userId, @Param("awsurl") String awsurl);
 
     @Transactional
     @Modifying

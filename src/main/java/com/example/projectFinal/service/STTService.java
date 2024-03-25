@@ -33,7 +33,11 @@ public class STTService {
             StringBuilder transcription = new StringBuilder();
             for (SpeechRecognitionResult result : results) {
                 SpeechRecognitionAlternative alternative = result.getAlternativesList().get(0);
-                transcription.append(alternative.getTranscript());
+//                transcription.append(alternative.getTranscript());
+
+                String transcript = alternative.getTranscript();
+                transcript = Character.toUpperCase(transcript.charAt(0)) + transcript.substring(1);
+                transcription.append(transcript);
             }
 
             return transcription.toString();

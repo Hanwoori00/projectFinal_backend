@@ -7,6 +7,7 @@ import com.example.projectFinal.service.ChatService;
 import com.example.projectFinal.service.Pooh;
 import com.example.projectFinal.service.TTSService;
 import com.example.projectFinal.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/chat")
@@ -32,7 +34,10 @@ public class ChatController {
 
     @PostMapping("/checkMission")
     @ResponseBody
-    public String CheckMission(@RequestBody ChatDto chatDto) { return chatService.missionCheck(chatDto);}
+    public ResponseEntity<Map<String, Object>> CheckMission(@RequestBody ChatDto chatDto) {
+        Map<String, Object> responseBody = chatService.missionCheck(chatDto);
+        return ResponseEntity.ok(responseBody);
+    }
     @PostMapping("/getAnswer")
     @ResponseBody
     public String GetAnswer(@RequestBody ChatDto chatDto) {

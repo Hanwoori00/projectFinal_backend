@@ -21,7 +21,7 @@
 <ul id="messageHistory"></ul>
 
 <audio id="myAudio" controls crossorigin="anonymous">
-    <source src="/pooh.mp3" type="audio/mp3">
+    <source src="/pooh.wav" type="audio/wav">
 </audio>
 
 <!-- Axios 라이브러리 추가 -->
@@ -114,16 +114,23 @@
     function displayMessages(extraMessage) {
         var messageList = document.getElementById('messageList');
         messageList.innerHTML = '';
+            // Axios를 사용하여 서버에 POST 요청 보내기
+            axios.post('/chat/SendChat', {
+                messages: messages
+            })
+            .then(function (response) {
+                // 서버 응답 메시지를 messages 배열에 추가
+                var aiMsg = response.data.aimsg;
 
-        messages.forEach(function (message) {
-            var listItem = document.createElement('li');
-            listItem.textContent = message;
-            if (extraMessage) {
-                listItem.textContent += ` ${extraMessage}`;
-            }
-            messageList.appendChild(listItem);
-        });
-    }
+                messages.push(`pooh: ${aiMsg}`);
+                console.log('???????????????????0',messages[0]);
+                console.log('???????????????????1',messages[1]);
+                // 화면에 서버 응답 메시지 출력
+                displayMessages();
+            })
+            .catch(function (error) {
+                console.error('에러 발생:', error);
+            });
 
     function updateAverage(time) {
         var currentAverage = calculateAverage(responseTimes);

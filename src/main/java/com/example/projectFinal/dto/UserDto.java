@@ -1,12 +1,9 @@
 package com.example.projectFinal.dto;
 
-import com.google.auto.value.AutoValue;
-import jakarta.persistence.Column;
 import lombok.*;
 
 import javax.annotation.Nullable;
 import java.sql.Timestamp;
-import java.util.Optional;
 
 public class UserDto {
 
@@ -70,24 +67,18 @@ public class UserDto {
         @Nullable private String NewToken;
     }
 
-    @Getter
+    @Data
     @NoArgsConstructor
     public static class GetUserDto{
-        private String userId;
+        private boolean result;
 
-        private String password;
+        private String userId;
 
         private String email;
 
         private String nickname;
 
-        private Timestamp createdAt;
-
-        private Timestamp deletedAt;
-
         private String profileImg;
-
-        private String refresh_key;
 
         private String roomId;
 
@@ -108,6 +99,12 @@ public class UserDto {
         private String userMsg;
         private String Aimsg;
         private boolean result;
+    }
+
+    @Data
+    public static class RealloginResDto{
+        private boolean result;
+        private String msg;
     }
 
 }

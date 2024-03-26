@@ -24,10 +24,13 @@ public class TTSService {
     private String xiApiKey;
 
     private static final int CHUNK_SIZE = 1024;
-    private static final String OUTPUT_PATH = "/Users/jeongwon/projectFinal/src/main/resources/static/pooh.mp3"; // 파일 경로 예제 수정
+    // 테스트 시 본인의 폴더 경로로 설정
+    private static final String JEONGWON_PATH = "/Users/jeongwon/projectFinal/src/main/resources/static/pooh.wav";
+    private static final String SERVER_PATH = "/home/ubuntu/dist/pooh.wav";
+
 
     public void callExternalApi(String text) throws IOException, UnsupportedAudioFileException {
-        String ttsUrl = "https://api.elevenlabs.io/v1/text-to-speech/xz0fqwiDAuKTI4bPzIKF"; // URL 수정
+        String ttsUrl = "https://api.elevenlabs.io/v1/text-to-speech/E8L2AWa6LcM4EdDfLn0G?optimize_streaming_latency=3"; // URL 수정
 
         // HttpClient 객체 생성
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
@@ -40,7 +43,7 @@ public class TTSService {
             // 데이터 페이로드 설정
             Map<String, Object> data = new HashMap<>();
             data.put("text", text);
-            data.put("model_id", "eleven_multilingual_v2");
+            data.put("model_id", "eleven_turbo_v2");
             Map<String, Object> voiceSettings = new HashMap<>();
             voiceSettings.put("stability", 0.5);
             voiceSettings.put("similarity_boost", 0.8);
@@ -59,7 +62,7 @@ public class TTSService {
 
             // POST 요청 실행
             try (CloseableHttpResponse response = httpClient.execute(request);
-                 OutputStream outputStream = new FileOutputStream(OUTPUT_PATH)) {
+                 OutputStream outputStream = new FileOutputStream(SERVER_PATH)) {
 
                 if (response.getStatusLine().getStatusCode() == 200) {
                     InputStream inputStream = response.getEntity().getContent();

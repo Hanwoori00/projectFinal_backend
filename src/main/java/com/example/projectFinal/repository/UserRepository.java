@@ -9,13 +9,24 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface UserRepository extends JpaRepository<User, String> {
-    boolean existsByUserId(String email);
-    boolean existsByNickname(String email);
+    boolean existsByUserId(String userid);
+    boolean existsByNickname(String nickname);
+
+    User findByNickname(String nickname);
+
+    User findByUserId(String userid);
+
+    User findByRefresh_key(String refreshKey);
 
     @Modifying
     @Transactional
     @Query("UPDATE User SET refresh_key = :refreshToken WHERE userId = :userId")
     void updateRefreshToken(@Param("userId") String userId, @Param("refreshToken") String refreshToken);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE User SET profileImg = :awsurl WHERE userId = :userId")
+    boolean updateProfileImg(@Param("userId") String userId, @Param("awsurl") String awsurl);
 
     @Transactional
     @Modifying

@@ -27,6 +27,7 @@ public class TokenProvider {
         this.jwt_key = Keys.hmacShaKeyFor(keyBytes);
     }
 
+    // 로그인 시
     public UserDto.TokenDto generateToken(String userId) {
         long now = (new Date().getTime());
 
@@ -34,7 +35,7 @@ public class TokenProvider {
                 .setSubject(String.valueOf(userId))
 //                .claim("auth", authorities)
 //                .setExpiration(new Date(now + 1800 * 1000))
-                .setExpiration(new Date(now + 18000))
+                .setExpiration(new Date(now + 1800000))
                 .signWith(jwt_key, SignatureAlgorithm.HS256)
                 .compact();
 
@@ -60,19 +61,48 @@ public class TokenProvider {
                     .parseClaimsJws(token)
                     .getBody();
 
-            System.out.println("토큰 활성화 여부 확인" + claims);
+            Date expirationDate = claims.getExpiration();
+
+            Date currentDate = new Date();
+
+            boolean isValid = expirationDate.after(currentDate);
+
+            String userId = claims.getSubject();
+
+            System.out.println("토큰에서 유저 ID 추출" + userId);
+
             result.setResult(true);
-            result.setMsg(claims.getSubject());
+            result.setMsg(userId);
 
             return result;
 
         } catch(ExpiredJwtException | IllegalArgumentException e){
+            System.out.println(e);
             result.setResult(false);
 
             return result;
         }
 
     }
+
+    // authuser
+    public UserDto.TokenDto generateAccessToken(String userId) {
+        long now = (new Date().getTime());
+
+        String accessToken = Jwts.builder()
+                .setSubject(String.valueOf(userId))
+//                .claim("auth", authorities)
+//                .setExpiration(new Date(now + 1800 * 1000))
+                .setExpiration(new Date(now + 1800000))
+                .signWith(jwt_key, SignatureAlgorithm.HS256)
+                .compact();
+
+        return UserDto.TokenDto.builder()
+                .accessToken(accessToken)
+                .build();
+    }
+
+
 
 
 }

@@ -20,7 +20,10 @@ import java.util.Scanner;
 public class ProjectFinalApplication {
 
 	public static void main(String[] args) {
-
-		SpringApplication.run(ProjectFinalApplication.class, args);
+		try {
+			SpringApplication.run(ProjectFinalApplication.class, args);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

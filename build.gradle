@@ -36,6 +36,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'mysql:mysql-connector-java:8.0.33'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
@@ -49,6 +50,8 @@ dependencies {
 	implementation 'com.google.cloud:google-cloud-storage'
 	implementation 'com.google.api-client:google-api-client:1.32.1'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'com.google.cloud:google-cloud-speech:4.31.0'
+
 
 }
 

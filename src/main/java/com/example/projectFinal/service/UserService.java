@@ -54,6 +54,7 @@ public class UserService {
         UserDto.LoginResDto result = new UserDto.LoginResDto();
         if(SelectId.isPresent()){
             User user = SelectId.get();
+
 //            비밀번호 일치 여부 확인
             boolean comparePW = bCryptPasswordEncoder.matches(loginDto.getPassword(), user.getPassword());
 
@@ -69,6 +70,7 @@ public class UserService {
 
             userRepository.updateRefreshToken(loginDto.getUserId(), tokenDto.getRefreshToken());
             result.setResult(true);
+            result.setMsg("로그인 성공!");
             result.setAccessToken(tokenDto.getAccessToken());
             result.setRefreshToken(tokenDto.getRefreshToken());
             return result;
@@ -93,36 +95,28 @@ public class UserService {
     public UserDto.AuthuserDto authuser(String accessToken, String RefreshToken){
         UserDto.AuthuserDto authuserDto = new UserDto.AuthuserDto();
 
-        // 액세스 토큰 유효 검증
-        UserDto.ResDto result = tokenProvider.validateAndGetUserId(accessToken);
-        System.out.println("액세스 토큰 확인" + result.isResult() + result.getMsg());
-        if(result.isResult()){
-            System.out.println("토큰 유효");
-            authuserDto.setResult(result.isResult());
-            authuserDto.setNickname(result.getMsg());
-            return authuserDto;
+        if(accessToken != null){
+            System.out.println("액세스 토큰 존재");
+            UserDto.ResDto validToken = this.tokenProvider.validateAndGetUserId(accessToken);
+
+            System.out.println(validToken.getMsg() + validToken.isResult());
+
+            User user = this.userRepository.findByUserId(validToken.getMsg());
+
+            authuserDto.setResult(true);
+            authuserDto.setNickname(user.getNickname());
         }
 
-        UserDto.ResDto result1 = tokenProvider.validateAndGetUserId(RefreshToken);
-        if(!result.isResult() && !result1.isResult()){
-            authuserDto.setResult(result1.isResult());
-            return authuserDto;
-        }
+        User user = this.userRepository.findByRefresh_key(RefreshToken);
+        System.out.println("유저 정보 확인" + user.getUserId());
 
-        User Userinfo = this.userRepository.findNicknameFromToken(RefreshToken);
+        UserDto.TokenDto tokenDto = this.tokenProvider.generateAccessToken(user.getUserId());
 
-        authuserDto.setResult(result1.isResult());
-        authuserDto.setNickname(Userinfo.getNickname());
-        authuserDto.setUserId(Userinfo.getUserId());
-
-        UserDto.TokenDto tokenDto = tokenProvider.generateToken(authuserDto.getUserId());
-
+        authuserDto.setNickname(user.getNickname());
         authuserDto.setNewToken(tokenDto.getAccessToken());
-
-        System.out.println("리프레시 토큰 인증 후 response" + authuserDto);
+        authuserDto.setResult(true);
 
         return authuserDto;
-
     }
 
     public boolean CheckDupId(String UserId){
@@ -132,6 +126,14 @@ public class UserService {
 
     public boolean CheckDupNick(String Nickname){
         return this.userRepository.existsByNickname(Nickname);
+    }
+
+    public User getUserDto(String nickname){
+        return this.userRepository.findByNickname(nickname);
+    }
+
+    public boolean uploadProfileImg(String awsurl, String userid){
+        return this.userRepository.updateProfileImg(awsurl, userid);
     }
 
 }

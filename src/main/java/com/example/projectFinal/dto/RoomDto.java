@@ -1,0 +1,20 @@
+package com.example.projectFinal.dto;
+
+import com.fasterxml.jackson.core.JsonToken;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+import lombok.Builder;
+import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.time.LocalDateTime;
+
+@Data
+@Builder
+public class RoomDto {
+    private String id;
+    private String userid;
+    private String ai;
+    private LocalDateTime createdAt;
+
+}

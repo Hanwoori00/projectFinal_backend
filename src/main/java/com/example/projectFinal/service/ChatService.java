@@ -17,13 +17,54 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Service
 public class ChatService {
 	String oAuthToken;
-	WebClient client;
+	WebClient chatClient;
+	WebClient textClient;
 	public void createConnection() throws IOException {
 		GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
 		oAuthToken = credentials.refreshAccessToken().getTokenValue();
-		String baseUrl = "https://asia-northeast3-aiplatform.googleapis.com/v1/projects/teampj-final/locations/asia-northeast3/publishers/google/models/chat-bison:predict";
-		client = WebClient.create(baseUrl);
+		String baseUrl_chat = "https://asia-northeast3-aiplatform.googleapis.com/v1/projects/teampj-final/locations/asia-northeast3/publishers/google/models/chat-bison:predict";
+		String baseUrl_text = "https://asia-northeast3-aiplatform.googleapis.com/v1/projects/teampj-final/locations/asia-northeast3/publishers/google/models/text-bison-32k:predict";
+		chatClient = WebClient.create(baseUrl_chat);
+		textClient = WebClient.create(baseUrl_text);
 	}
+
+	public String missionCheck(ChatDto chatDto) {
+		String[] missionSamples = {
+				"I never thought I'd...",
+				"I may never...",
+				"You should try to ...",
+				"Maybe we should ...",
+				"How do I get to ...?"
+		};
+		String missionsContext = contextifyMissions(missionSamples);
+//		String missionsContext = contextifyMissions(chatDto.getMissions());//실제론 미션 리스트 받음.
+		MissionAi ai = new MissionAi();
+		String sentence = chatDto.getUserMsg();
+		String requestBody = "{\"instances\":[{\"content\":\"" + missionsContext + ai.context + sentence + "\"}],\"parameters\":{\"maxOutputTokens\":8192,\"temperature\":0.1,\"topP\":1}}";
+		String response = textClient.post()
+				.header("Content-Type", "application/json")
+				.header("Authorization", "Bearer " + oAuthToken) // OAuth 토큰을 헤더에 포함
+				.body(BodyInserters.fromValue(requestBody))
+				.retrieve()
+				.bodyToMono(String.class)
+				.block(); // blocking call to wait for response, you might consider async handling instead
+		System.out.println(response);
+		JsonObject jsonResponse = JsonParser.parseString(response).getAsJsonObject();
+		JsonArray predictions = jsonResponse.getAsJsonArray("predictions");
+		JsonObject firstPrediction = predictions.get(0).getAsJsonObject();
+		String result = firstPrediction.get("content").getAsString();
+		chatDto.setMissionCheck(result);
+		return chatDto.getMissionCheck();
+	}
+
+	public String contextifyMissions(String[] missions) {
+		StringBuilder formattedMissions = new StringBuilder();
+		for (int i = 0; i < missions.length; i++) {
+			formattedMissions.append((i + 1) + ". " + missions[i] + "\n");
+		}
+		return formattedMissions.toString();
+	}
+
 
 	public String[] getCorrection(ChatDto chatDto) {
 		String[] messages = chatDto.getMessages();

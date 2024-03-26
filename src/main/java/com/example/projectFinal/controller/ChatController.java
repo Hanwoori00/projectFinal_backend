@@ -30,6 +30,9 @@ public class ChatController {
         TTSservice = ttSservice;
     }
 
+    @PostMapping("/checkMission")
+    @ResponseBody
+    public String CheckMission(@RequestBody ChatDto chatDto) { return chatService.missionCheck(chatDto);}
     @PostMapping("/getAnswer")
     @ResponseBody
     public String GetAnswer(@RequestBody ChatDto chatDto) {

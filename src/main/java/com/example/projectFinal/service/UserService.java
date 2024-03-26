@@ -95,35 +95,26 @@ public class UserService {
     public UserDto.AuthuserDto authuser(String accessToken, String RefreshToken){
         UserDto.AuthuserDto authuserDto = new UserDto.AuthuserDto();
 
-        // 액세스 토큰 유효 검증
-        UserDto.ResDto result = tokenProvider.validateAndGetUserId(accessToken);
-        System.out.println("액세스 토큰 확인" + result.isResult() + result.getMsg());
-        if(result.isResult()){
-            authuserDto.setResult(result.isResult());
-            authuserDto.setNickname(result.getMsg());
-            return authuserDto;
+        if(accessToken != null){
+            System.out.println("액세스 토큰 존재");
+            UserDto.ResDto validToken = this.tokenProvider.validateAndGetUserId(accessToken);
+
+            System.out.println(validToken.getMsg() + validToken.isResult());
+
+            User user = this.userRepository.findByUserId(validToken.getMsg());
+
+            authuserDto.setResult(true);
+            authuserDto.setNickname(user.getNickname());
         }
 
-        UserDto.ResDto result1 = tokenProvider.validateAndGetUserId(RefreshToken);
-        if(!result.isResult() && !result1.isResult()){
-            authuserDto.setResult(result1.isResult());
-            return authuserDto;
-        }
+        User user = this.userRepository.findNicknameFromToken(RefreshToken);
+        System.out.println("유저 정보 확인" + user.getUserId());
 
-        User Userinfo = this.userRepository.findNicknameFromToken(RefreshToken);
+        UserDto.TokenDto tokenDto = this.tokenProvider.generateAccessToken(user.getUserId());
 
-        authuserDto.setResult(result1.isResult());
-        if(Userinfo.getNickname() != null ){
-            return authuserDto;
-        }
-        authuserDto.setNickname(Userinfo.getNickname());
-        authuserDto.setUserId(Userinfo.getUserId());
-
-        UserDto.TokenDto tokenDto = tokenProvider.generateToken(authuserDto.getUserId());
-
+        authuserDto.setNickname(user.getNickname());
         authuserDto.setNewToken(tokenDto.getAccessToken());
-
-        System.out.println("리프레시 토큰 인증 후 response" + authuserDto);
+        authuserDto.setResult(true);
 
         return authuserDto;
     }

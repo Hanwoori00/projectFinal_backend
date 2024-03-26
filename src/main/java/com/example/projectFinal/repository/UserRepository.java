@@ -14,6 +14,9 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     User findByNickname(String nickname);
 
+    User findByUserId(String userid);
+
+
     @Modifying
     @Transactional
     @Query("UPDATE User SET refresh_key = :refreshToken WHERE userId = :userId")

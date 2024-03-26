@@ -3,6 +3,7 @@ package com.example.projectFinal.controller;
 import com.example.projectFinal.dto.ChatDto;
 import com.example.projectFinal.dto.UserDto;
 import com.example.projectFinal.entity.User;
+import com.example.projectFinal.jwt.TokenProvider;
 import com.example.projectFinal.service.ChatService;
 import com.example.projectFinal.service.S3Service;
 import com.example.projectFinal.service.TTSService;
@@ -10,6 +11,7 @@ import com.example.projectFinal.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import kong.unirest.HttpResponse;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,11 +32,14 @@ public class UserController {
 
     private final ChatService chatService;
 
-    public UserController(UserService userService, TTSService ttSservice, S3Service s3Service, ChatService chatService) {
+    private final TokenProvider tokenProvider;
+
+    public UserController(UserService userService, TTSService ttSservice, S3Service s3Service, ChatService chatService, TokenProvider tokenProvider) {
         this.userService = userService;
         TTSservice = ttSservice;
         this.s3Service = s3Service;
         this.chatService = chatService;
+        this.tokenProvider = tokenProvider;
     }
 
     @PostMapping("/register")
@@ -168,22 +173,41 @@ public class UserController {
                 authuserDto.setResult(false);
                 authuserDto.setNickname("로그인 상태가 아닙니다");
                 return authuserDto;
-            } else {
-                System.out.println("컨트롤러에서 쿠키 확인" + accessToken + " refresh  " + RefreshToken);
-                UserDto.AuthuserDto result = this.userService.authuser(accessToken, RefreshToken);
-                authuserDto.setResult(result.isResult());
-                authuserDto.setNickname(result.getNickname());
+            }
 
-//                Cookie AccessCookie = new Cookie("accessToken", String.valueOf(result.getNewToken()));
-//                AccessCookie.setMaxAge(1800);
-//                AccessCookie.setHttpOnly(true);
-//                response.addCookie(AccessCookie);
+            UserDto.AuthuserDto authuser = this.userService.authuser(accessToken, RefreshToken);
+
+            System.out.println("토큰 재생성 여부 확인" + authuser.getNewToken());
+
+            if(authuser.getNewToken() != null){
+                Cookie AccessCookie = new Cookie("accessToken", String.valueOf(authuser.getNewToken()));
+                AccessCookie.setMaxAge(1800);
+                AccessCookie.setHttpOnly(true);
+                AccessCookie.setPath("/");
+                AccessCookie.setAttribute("SameSite", "Lax");
+                response.addCookie(AccessCookie);
+
+                response.flushBuffer();
+
+                authuserDto.setResult(true);
+                authuserDto.setNickname(authuser.getNickname());
+
+                System.out.println("컨트롤러에서 쿠키 확인" + accessToken + " refresh  " + RefreshToken);
 
                 return authuserDto;
             }
+
+            authuserDto.setResult(true);
+            authuserDto.setNickname(authuser.getNickname());
+
+            System.out.println("컨트롤러에서 쿠키 확인" + accessToken + " refresh  " + RefreshToken);
+
+            return authuserDto;
+
+
         } catch (Exception e) {
             authuserDto.setResult(false);
-            authuserDto.setNickname("인증 처리 중 오류가 발생했습니다.");
+            authuserDto.setNickname("인증 처리 중 오류가 발생했습니다." + e);
             return authuserDto;
         }
     }
@@ -207,7 +231,7 @@ public class UserController {
             return getUserDto;
         } catch (Exception e) {
             getUserDto.setResult(false);
-            getUserDto.setNickname("정보 조회 중 오류가 발생했습니다.");
+            getUserDto.setNickname("정보 조회 중 오류가 발생했습니다." + e);
             return getUserDto;
         }
     }

@@ -19,6 +19,9 @@ public class ChatController {
         this.chatService = chatService;
     }
 
+    @PostMapping("/checkMission")
+    @ResponseBody
+    public String CheckMission(@RequestBody ChatDto chatDto) { return chatService.missionCheck(chatDto);}
     @PostMapping("/getAnswer")
     @ResponseBody
     public String GetAnswer(@RequestBody ChatDto chatDto) {

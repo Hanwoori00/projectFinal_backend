@@ -9,6 +9,7 @@
 <input type="text" id="userMsg" placeholder="메시지를 입력하세요">
 <!-- 전송 버튼 -->
 <button onclick="sendMessage()">Send</button>
+<button onclick="missionCheck()">MissionCheck</button>
 <!-- 메시지 목록 -->
 <ul id="messageList"></ul>
 <!-- 대화종료 버튼 -->
@@ -24,19 +25,32 @@
 </audio>
 
 <!-- Axios 라이브러리 추가 -->
-
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
     var messages = [];
+    var responseTimes = [];
+    var messageCount = 0;
 
-    // window.onload = function() {
-    // 	axios.post('/chat/createConnection')
-    // 	.then(function(response) {
-    // 		console.log(response.data)})
-    // 	.catch(function (error) {
-    // 		console.error('에러 발생:', error);
-    // 	})
-    // }
+    window.onload = function() {
+        axios.post('/chat/createConnection')
+        .then(function(response) {
+            console.log(response.data)})
+        .catch(function (error) {
+            console.error('에러 발생:', error);
+    })
+    }
+    function missionCheck() {
+        var userMsg = document.getElementById('userMsg').value;
+        axios.post('/chat/checkMission', {
+            userMsg : userMsg
+        })
+        .then(function (response) {
+            console.log(response.data);
+        })
+        .catch(function (error) {
+            console.error('에러 발생:', error);
+        });
+    }
     function finishChat() {
         var messageHistory = document.getElementById('messageHistory');
         var checkingMsg = document.createElement('li');
@@ -71,49 +85,63 @@
         });
     }
 
+    function sendMessage() {
+        var userMsg = document.getElementById('userMsg').value;
+        var startTime = performance.now();
+        messages.push(`user: ${userMsg}`);
+        displayMessages();
 
-        function sendMessage() {
-            // 입력 필드에서 메시지 가져오기
-            var userMsg = document.getElementById('userMsg').value;
+        axios.post('/chat/getAnswer', {
+            messages: messages
+        })
+        .then(function (response) {
+            var aiMsg = response.data;
+            messages.push(`pooh: ${aiMsg}`);
+            var endTime = performance.now();
+            var elapsedTime = endTime - startTime;
+            responseTimes.push(elapsedTime);
+            messageCount++;
+            displayMessages(`(소요 시간: ${elapsedTime.toFixed(2)}ms)`);
+            updateAverage(elapsedTime);
+        })
+        .catch(function (error) {
+            console.error('에러 발생:', error);
+        });
 
-            // messages 배열에 사용자가 입력한 메시지 추가
-            messages.push(`user: ${userMsg}`);
+        document.getElementById('userMsg').value = '';
+    }
 
-            // 화면에 사용자가 입력한 메시지 출력
-            displayMessages();
+    function displayMessages(extraMessage) {
+        var messageList = document.getElementById('messageList');
+        messageList.innerHTML = '';
 
-            // Axios를 사용하여 서버에 POST 요청 보내기
-            axios.post('/user/sendChat', {
-                messages: messages
-            })
-            .then(function (response) {
-                // 서버 응답 메시지를 messages 배열에 추가
-                var aiMsg = response.data.aimsg;
-                messages.push(`pooh: ${aiMsg}`);
-                console.log('???????????????????0',messages[0]);
-                console.log('???????????????????1',messages[1]);
-                // 화면에 서버 응답 메시지 출력
-                displayMessages();
-            })
-            .catch(function (error) {
-                console.error('에러 발생:', error);
-            });
+        messages.forEach(function (message) {
+            var listItem = document.createElement('li');
+            listItem.textContent = message;
+            if (extraMessage) {
+                listItem.textContent += ` ${extraMessage}`;
+            }
+            messageList.appendChild(listItem);
+        });
+    }
 
-            // 입력 필드 비우기
-            document.getElementById('userMsg').value = '';
+    function updateAverage(time) {
+        var currentAverage = calculateAverage(responseTimes);
+        var newAverage = ((currentAverage * (messageCount - 1)) + time) / messageCount;
+        var averageTimeDiv = document.getElementById('averageTime');
+        if (!averageTimeDiv) {
+            averageTimeDiv = document.createElement('div');
+            averageTimeDiv.id = 'averageTime';
+            document.body.appendChild(averageTimeDiv);
         }
+        averageTimeDiv.textContent = "Average Response Time: " + newAverage.toFixed(2) + "ms";
+    }
 
-        // messages 배열에 저장된 메시지들을 화면에 출력하는 함수
-        function displayMessages() {
-            var messageList = document.getElementById('messageList');
-            messageList.innerHTML = ''; // 기존 내용 삭제
-
-            messages.forEach(function(message) {
-                var listItem = document.createElement('li');
-                listItem.textContent = message;
-                messageList.appendChild(listItem);
-            });
-        }
+    function calculateAverage(arr) {
+        if (arr.length === 0) return 0;
+        var sum = arr.reduce((acc, val) => acc + val, 0);
+        return sum / arr.length;
+    }
 </script>
 </body>
 </html>

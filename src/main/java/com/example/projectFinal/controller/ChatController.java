@@ -35,12 +35,12 @@ public class ChatController {
     public String GetAnswer(@RequestBody ChatDto chatDto) {
         return chatService.getAnswer(chatDto);
     }
-//    @PostMapping("/createConnection")
-//    @ResponseBody
-//    public String CreateConnection() {
-//        chatService.createConnection();
-//        return "Connection created successfully";
-//    }
+    @PostMapping("/createConnection")
+    @ResponseBody
+    public String CreateConnection() throws IOException {
+        chatService.createConnection();
+        return "Connection created successfully";
+    }
     @PostMapping("/getCorrection")
     @ResponseBody
     public String[] GecCorrection(@RequestBody ChatDto chatDto) {

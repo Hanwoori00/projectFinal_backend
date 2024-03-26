@@ -131,7 +131,7 @@
             .catch(function (error) {
                 console.error('에러 발생:', error);
             });
-
+        }
     function updateAverage(time) {
         var currentAverage = calculateAverage(responseTimes);
         var newAverage = ((currentAverage * (messageCount - 1)) + time) / messageCount;

@@ -7,10 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -34,7 +31,10 @@ public class ChatService {
 
 		HttpURLConnection connection = null;
 		try {
-			GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
+			// 서버 용 json 코드
+			GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("/home/ubuntu/.config/gcloud/application_default_credentials.json"));
+			// 로컬 용 테스트 코드
+			//GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
 			String oAuthToken = credentials.refreshAccessToken().getTokenValue();
 			URL url = new URL("https://asia-northeast3-aiplatform.googleapis.com/v1/projects/teampj-final/locations/asia-northeast3/publishers/google/models/text-bison-32k:predict");
 			connection = (HttpURLConnection) url.openConnection();
@@ -93,27 +93,23 @@ public class ChatService {
 		String[] messages = chatDto.getMessages();
 		Pooh pooh = new Pooh();
 		String msgQuery = makeMessagesQuery(messages);
+    String requestBody = "{\"instances\": [{\"context\": \"" + pooh.validContext + "\",\"messages\": [" + msgQuery + "]}],\"parameters\": {\"temperature\": 0.3,\"maxOutputTokens\": 200,\"topP\": 0.8,\"topK\": 40}}";
 
-        String requestBody = "{\"instances\": [{\"context\": \"" + pooh.validContext + "\",\"messages\": [" + msgQuery + "]}],\"parameters\": {\"temperature\": 0.3,\"maxOutputTokens\": 200,\"topP\": 0.8,\"topK\": 40}}";
-
-        String response = client.post()
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + oAuthToken) // OAuth 토큰을 헤더에 포함
-                .body(BodyInserters.fromValue(requestBody))
-                .retrieve()
-                .bodyToMono(String.class)
-                .block(); // blocking call to wait for response, you might consider async handling instead
-
-        JsonObject jsonResponse = JsonParser.parseString(response).getAsJsonObject();
-        JsonArray predictions = jsonResponse.getAsJsonArray("predictions");
-        JsonObject firstPrediction = predictions.get(0).getAsJsonObject();
-        JsonArray candidates = firstPrediction.getAsJsonArray("candidates");
-        String content = candidates.get(0).getAsJsonObject().get("content").getAsString();
-
-        chatDto.setAiMsg(content); // Setting the response to chatDto
-
-        return chatDto.getAiMsg();
-    }
+    String response = client.post()
+            .header("Content-Type", "application/json")
+            .header("Authorization", "Bearer " + oAuthToken) // OAuth 토큰을 헤더에 포함
+            .body(BodyInserters.fromValue(requestBody))
+            .retrieve()
+            .bodyToMono(String.class)
+            .block(); // blocking call to wait for response, you might consider async handling instead
+    JsonObject jsonResponse = JsonParser.parseString(response).getAsJsonObject();
+    JsonArray predictions = jsonResponse.getAsJsonArray("predictions");
+    JsonObject firstPrediction = predictions.get(0).getAsJsonObject();
+    JsonArray candidates = firstPrediction.getAsJsonArray("candidates");
+    String content = candidates.get(0).getAsJsonObject().get("content").getAsString();
+    chatDto.setAiMsg(content); // Setting the response to chatDto
+    return chatDto.getAiMsg();
+  }
 	private String makeMessagesQuery(String[] messages) {
 		StringBuilder msgQuery = new StringBuilder();
 

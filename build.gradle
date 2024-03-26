@@ -49,6 +49,8 @@ dependencies {
 	implementation 'com.google.cloud:google-cloud-storage'
 	implementation 'com.google.api-client:google-api-client:1.32.1'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'com.google.cloud:google-cloud-speech:4.31.0'
+
 
 }
 

@@ -16,8 +16,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     User findByUserId(String userid);
 
-    User findByrefresh_key(String RefreshToken);
-
+    User findByRefresh_key(String refreshKey);
 
     @Modifying
     @Transactional

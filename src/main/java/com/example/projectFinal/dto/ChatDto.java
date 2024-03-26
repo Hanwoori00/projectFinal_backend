@@ -15,5 +15,7 @@ public class ChatDto {
     private String userMsg;
     private String aiMsg;
     private String[] messages;
-    private String missionCheck;
+    private Boolean missionSuccess;
+    private Integer successNumber;
+
 }

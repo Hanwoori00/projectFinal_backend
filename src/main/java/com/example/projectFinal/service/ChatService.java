@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -31,7 +34,7 @@ public class ChatService {
 		textClient = WebClient.create(baseUrl_text);
 	}
 
-	public String missionCheck(ChatDto chatDto) {
+	public Map<String, Object> missionCheck(ChatDto chatDto) {
 		String[] missionSamples = {
 				"I never thought I'd...",
 				"I may never...",
@@ -56,8 +59,26 @@ public class ChatService {
 		JsonArray predictions = jsonResponse.getAsJsonArray("predictions");
 		JsonObject firstPrediction = predictions.get(0).getAsJsonObject();
 		String result = firstPrediction.get("content").getAsString();
-		chatDto.setMissionCheck(result);
-		return chatDto.getMissionCheck();
+		System.out.println("???????????????????????"+result);
+		if (result.contains("T")) {
+			// response를 쉼표를 기준으로 분할
+			String[] parts = result.split(", ");
+			if (parts.length >= 2) {
+				// 첫 번째 인자를 boolean으로 변환하여 res1에 설정
+				chatDto.setMissionSuccess(Boolean.parseBoolean(parts[0].trim()));
+				// 두 번째 인자를 Integer로 변환하여 res2에 설정
+				chatDto.setSuccessNumber(Integer.parseInt(parts[1].trim()));
+			}
+		} else {
+			chatDto.setMissionSuccess(Boolean.FALSE);
+			chatDto.setSuccessNumber(0);
+		}
+
+		Map<String, Object> responseBody = new HashMap<>();
+		responseBody.put("isSuccess", chatDto.getMissionSuccess());
+		responseBody.put("successNumber", chatDto.getSuccessNumber());
+
+		return responseBody;
 	}
 
 	public String contextifyMissions(String[] missions) {

@@ -45,7 +45,8 @@
             userMsg : userMsg
         })
         .then(function (response) {
-            console.log(response.data);
+            console.log(response.data.isSuccess);
+            console.log(response.data.successNumber);
         })
         .catch(function (error) {
             console.error('에러 발생:', error);

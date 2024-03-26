@@ -16,8 +16,6 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     User findByUserId(String userid);
 
-//    User findByRefresh_key(String refreshKey);
-
     @Modifying
     @Transactional
     @Query("UPDATE User SET refresh_key = :refreshToken WHERE userId = :userId")
@@ -36,4 +34,5 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Transactional
     @Query("SELECT u FROM User u WHERE u.refresh_key = :refreshToken")
     User findNicknameFromToken(@Param("refreshToken") String refreshToken);
+
 }

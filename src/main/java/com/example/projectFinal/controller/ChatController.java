@@ -67,6 +67,10 @@ public class ChatController {
         UserDto.SendChatDto sendChatDto = new UserDto.SendChatDto();
 
         try {
+            this.chatService.createConnection();
+
+            System.out.println("sendChat 토큰 확인 " + accessToken + RefreshToken);
+
             UserDto.AuthuserDto authuser = this.userService.authuser(accessToken, RefreshToken);
 
             chatDto.setMessages(chatDto.getMessages());

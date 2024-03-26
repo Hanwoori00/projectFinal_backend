@@ -1,14 +1,14 @@
 package com.example.projectFinal.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
 //비즈니스 서비스 내 chat bison 과 통신하기위한 수단. DB 용 아님. DB는 MessageDto
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChatDto {
 
     private String[] missions;

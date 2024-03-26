@@ -105,10 +105,18 @@ public class UserService {
 
             authuserDto.setResult(true);
             authuserDto.setNickname(user.getNickname());
+
+            return authuserDto;
         }
 
         User user = this.userRepository.findNicknameFromToken(RefreshToken);
-        System.out.println("유저 정보 확인" + user.getUserId());
+        if(user == null){
+            authuserDto.setResult(false);
+            authuserDto.setNickname(null);
+            authuserDto.setUserId(null);
+
+            return authuserDto;
+        }
 
         UserDto.TokenDto tokenDto = this.tokenProvider.generateAccessToken(user.getUserId());
 

@@ -76,6 +76,7 @@ public class ChatController {
             if(!authuser.isResult()){
                 return sendChatDto;
             } else{
+
                 sendChatDto.setNickname(authuser.getNickname());
                 return sendChatDto;
             }

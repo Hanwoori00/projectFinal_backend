@@ -162,7 +162,9 @@ public class UserController {
     public UserDto.AuthuserDto authUser(HttpServletResponse response, @CookieValue(name = "accessToken", required = false) String accessToken, @CookieValue(name = "RefreshToken", required = false) String RefreshToken) {
         UserDto.AuthuserDto authuserDto = new UserDto.AuthuserDto();
         try {
+            System.out.println("auth user 리프레시 토큰 검증" + RefreshToken);
             if (RefreshToken == null) {
+                System.out.println("토큰 null 일 경우" + RefreshToken);
                 authuserDto.setResult(false);
                 authuserDto.setNickname("로그인 상태가 아닙니다");
                 return authuserDto;

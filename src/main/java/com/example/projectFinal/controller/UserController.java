@@ -174,10 +174,10 @@ public class UserController {
                 authuserDto.setResult(result.isResult());
                 authuserDto.setNickname(result.getNickname());
 
-                Cookie AccessCookie = new Cookie("accessToken", String.valueOf(result.getNewToken()));
-                AccessCookie.setMaxAge(1800);
-                AccessCookie.setHttpOnly(true);
-                response.addCookie(AccessCookie);
+//                Cookie AccessCookie = new Cookie("accessToken", String.valueOf(result.getNewToken()));
+//                AccessCookie.setMaxAge(1800);
+//                AccessCookie.setHttpOnly(true);
+//                response.addCookie(AccessCookie);
 
                 return authuserDto;
             }

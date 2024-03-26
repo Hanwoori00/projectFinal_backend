@@ -1,10 +1,13 @@
 package com.example.projectFinal.service;
 
+import com.google.api.gax.core.FixedCredentialsProvider;
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.speech.v1.*;
 import com.google.protobuf.ByteString;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -12,6 +15,8 @@ import java.util.List;
 public class STTService {
 
     public String SpeechToText(MultipartFile audioFile) throws IOException {
+        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("/home/ubuntu/.config/gcloud/application_default_credentials.json"));
+
         try (SpeechClient speech = SpeechClient.create()){
             byte[] data = audioFile.getBytes();
             ByteString audioBytes = ByteString.copyFrom(data);

@@ -23,7 +23,10 @@ public class ChatService {
 	WebClient chatClient;
 	WebClient textClient;
 	public void createConnection() throws IOException {
-		GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
+		// 서버 코드
+		GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("/home/ubuntu/.config/gcloud/application_default_credentials.json"));
+		// 로컬 코드
+//		GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
 		oAuthToken = credentials.refreshAccessToken().getTokenValue();
 		String baseUrl_chat = "https://asia-northeast3-aiplatform.googleapis.com/v1/projects/teampj-final/locations/asia-northeast3/publishers/google/models/chat-bison:predict";
 		String baseUrl_text = "https://asia-northeast3-aiplatform.googleapis.com/v1/projects/teampj-final/locations/asia-northeast3/publishers/google/models/text-bison-32k:predict";

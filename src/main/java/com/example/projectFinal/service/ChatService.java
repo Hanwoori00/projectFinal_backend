@@ -108,7 +108,7 @@ public class ChatService {
 		}
 		String stringifiedMessages = stringifyMessage(messages);
 		try {
-			String requestBody = "{\"instances\":[{\"content\":\"" + ai.context + stringifiedMessages + "\"}],\"parameters\":{\"maxOutputTokens\":8192,\"temperature\":0.1,\"topP\":1}}";
+			String requestBody = "{\"instances\":[{\"content\":\"" + ai.context + stringifiedMessages + "\"}],\"parameters\":{\"maxOutputTokens\":8192,\"temperature\":0.5,\"topP\":1}}";
 			if (connection != null) {
 				DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
 				outputStream.writeBytes(requestBody);

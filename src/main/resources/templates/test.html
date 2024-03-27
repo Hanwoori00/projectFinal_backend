@@ -16,6 +16,8 @@
 <br>
 <hr>
 <button onclick="finishChat()">Finish</button>
+<button onclick="newRoom()">CreateRoom</button>
+<button onclick="checkMessages()">CheckMessages</button>
 <br>
 <h3>Grammar Check</h3>
 <ul id="messageHistory"></ul>
@@ -30,7 +32,7 @@
     var messages = [];
     var responseTimes = [];
     var messageCount = 0;
-
+    var roomid;
     window.onload = function() {
         axios.post('/chat/createConnection')
         .then(function(response) {
@@ -39,6 +41,26 @@
             console.error('에러 발생:', error);
     })
     }
+    function checkMessages() {
+        axios.get('/message/getMessagesByRoomid', {
+            roomid : roomid
+        }).then(function (response) {
+            console.log(response.data);
+            var msgArr = Json.parse(response.data);
+            console.log(msgArr[0]);
+        })
+    }
+    function newRoom() {
+        axios.post('/room/newRoom', {
+            userid : 'han123',
+            ai : 'pooh',
+            messages : messages
+        }).then(function (response) {
+            console.log(response.data)
+            roomid = response.data;
+        })
+    }
+
     function missionCheck() {
         var userMsg = document.getElementById('userMsg').value;
         axios.post('/chat/checkMission', {
@@ -61,8 +83,9 @@
             messages: messages
         })
         .then(function(response) {
+            console.log(response.data)
             messageHistory.removeChild(checkingMsg);
-
+            messages = response.data;
             var correctCount = 0;
             var correctedMsg = response.data;
             correctedMsg.forEach(function(msg) {
@@ -89,8 +112,6 @@
         var userMsg = document.getElementById('userMsg').value;
         var startTime = performance.now();
         messages.push(`user: ${userMsg}`);
-        displayMessages();
-
         axios.post('/chat/getAnswer', {
             messages: messages
         })
@@ -112,26 +133,24 @@
     }
 
     function displayMessages(extraMessage) {
-        var messageList = document.getElementById('messageList');
-        messageList.innerHTML = '';
-            // Axios를 사용하여 서버에 POST 요청 보내기
-            axios.post('/chat/SendChat', {
-                messages: messages
-            })
-            .then(function (response) {
-                // 서버 응답 메시지를 messages 배열에 추가
-                var aiMsg = response.data.aimsg;
+    var messageList = document.getElementById('messageList');
+    messageList.innerHTML = ''; // Clear previous messages
 
-                messages.push(`pooh: ${aiMsg}`);
-                console.log('???????????????????0',messages[0]);
-                console.log('???????????????????1',messages[1]);
-                // 화면에 서버 응답 메시지 출력
-                displayMessages();
-            })
-            .catch(function (error) {
-                console.error('에러 발생:', error);
-            });
+    messages.forEach(function(msg, index) {
+        var messageItem = document.createElement('li');
+        messageItem.textContent = msg;
+        if (index < responseTimes.length) {
+            messageItem.textContent += ` (${responseTimes[index].toFixed(2)}ms)`;
         }
+        messageList.appendChild(messageItem);
+    });
+
+    if (extraMessage) {
+        var extraMessageItem = document.createElement('li');
+        extraMessageItem.textContent = extraMessage;
+        messageList.appendChild(extraMessageItem);
+    }
+}
     function updateAverage(time) {
         var currentAverage = calculateAverage(responseTimes);
         var newAverage = ((currentAverage * (messageCount - 1)) + time) / messageCount;

@@ -7,7 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Builder
@@ -16,5 +18,4 @@ public class RoomDto {
     private String userid;
     private String ai;
     private LocalDateTime createdAt;
-
 }

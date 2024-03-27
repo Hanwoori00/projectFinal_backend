@@ -7,13 +7,22 @@ public class CorrectAi {
             Among those begin with 'user', if there is a grammar error, 
             draw an arrow -> to the right of the sentence followed the sentence you modified.
             Here goes an example:
-            If you find 'user: I are Joseph.'
-            Then you return
-            'I are Joseph. -> I am Joseph.'
-            and some more in same way if you fine more.
-            But don't be too strict.
-            For example if you find
-            'I can't', then just leave it. If you find critical grammar error, then you correct it.
+            INPUT
+            user: Hi! 
+            pooh: Oh, hello there! Is it you, my friend? What's your name? 
+            user: I'm Joseph. What are your name?
+            pooh: Oh, how lovely to meet you, Joseph! My name is Pooh, silly old bear. What a beautiful day, isn't it?
+            OUTPUT
+            user: Hi!
+            pooh: Oh, hello there! Is it you, my friend? What's your name?
+            user: I'm Joseph. What are your name? -> What is your name?
+            pooh: Oh, how lovely to meet you, Joseph! My name is Pooh, silly old bear. What a beautiful day, isn't it?
+            
+            
+            But here's some exceptions(don't be too strict).
+            'I can't', 'Good' can be considered uncompleted sentence, but as far as it can be considered to be skipped, just leave it.
+            And don't mind marks. Just focus on letters. Don't need to change 'Good!' into 'Good.'
+            If you find critical grammar error, then you correct it.
             Remember that if you don't find grammar error from user's sentence, just leave it. 
             But if you find no grammar error among user's sentences, return 'Perfect Grammar' only.
             """;

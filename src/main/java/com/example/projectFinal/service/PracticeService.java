@@ -49,6 +49,7 @@ public class PracticeService {
         JsonArray predictions = jsonResponse.getAsJsonArray("predictions");
         JsonObject firstPrediction = predictions.get(0).getAsJsonObject();
         String result = firstPrediction.get("content").getAsString();
+        System.out.println("????????????????????????????????????????????????"+result);
         String[] resultSplit = result.split(",, ");
         //***************************************************
         //여기부터 표현 넣어서 5개문장 result로 담아올때 스플릿하고 json으로 나눠서 보내주고 postman으로 검증해봐.

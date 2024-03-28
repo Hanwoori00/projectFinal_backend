@@ -23,6 +23,15 @@ public class PracticeController {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getPractice(@RequestParam String expression) throws IOException {
         Map<String, Object> responseBody = practiceService.getPractice(expression);
+        System.out.println(responseBody);
         return ResponseEntity.ok(responseBody);
+        //이런 형식으로 올거임.
+//          {
+//          "ex1" : ~~
+//          "ex2" : resultSplit[1]
+//          "ex3" : resultSplit[2]
+//          "conversationA" : resultSplit[3]
+//          "conversationB" : resultSplit[4]
+//          }
     }
 }

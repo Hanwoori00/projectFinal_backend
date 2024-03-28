@@ -49,8 +49,14 @@ public class UserMissionService {
 
 
     public List<UserMissionEntity> getUnusedMissionsForUser(String userId) {
+        // user 찾기
+        User user = userRepository.findByUserId(userId);
+        if (user == null) {
+            return Collections.emptyList();
+        }
+
         // 사용하지 않은 미션 가져오기
-        List<UserMissionEntity> unusedMissions = userMissionRepository.findByUserIdAndUsed(userId, false);
+        List<UserMissionEntity> unusedMissions = userMissionRepository.findByUserIdAndUsed(user, false);
 
         Collections.shuffle(unusedMissions);
         return unusedMissions.stream().limit(3).collect(Collectors.toList());

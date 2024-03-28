@@ -55,12 +55,10 @@ public class TTSService {
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(data);
 
-            // 요청 바디 설정
             StringEntity entity = new StringEntity(json);
             request.setEntity(entity);
             request.setHeader("Content-type", "application/json");
 
-            // POST 요청 실행
             try (CloseableHttpResponse response = httpClient.execute(request);
                  OutputStream outputStream = new FileOutputStream(SERVER_PATH)) {
 

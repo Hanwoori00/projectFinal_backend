@@ -177,13 +177,16 @@ public class UserController {
 
             UserDto.AuthuserDto authuser = this.userService.authuser(accessToken, RefreshToken);
 
-            System.out.println("토큰 재생성 여부 확인" + authuser.getNewToken());
+            System.out.println("토큰 재생성 여부 확인" + authuser.getNewToken() + authuser.getUserId());
 
             if(authuser.getNewToken() != null){
+                System.out.println("액세스 토큰, 쿠키 재생성" + authuser.getNewToken());
                 Cookie AccessCookie = new Cookie("accessToken", String.valueOf(authuser.getNewToken()));
                 AccessCookie.setMaxAge(1800);
                 AccessCookie.setHttpOnly(true);
                 AccessCookie.setPath("/");
+                response.addHeader("Access-Control-Allow-Credentials", "true");
+                response.addHeader("Access-Control-Allow-Origin", "*");
                 AccessCookie.setAttribute("SameSite", "Lax");
                 response.addCookie(AccessCookie);
 
@@ -234,6 +237,13 @@ public class UserController {
             getUserDto.setNickname("정보 조회 중 오류가 발생했습니다." + e);
             return getUserDto;
         }
+    }
+
+    @PatchMapping("/info")
+    public UserDto.ResDto UpdateUserInfo(@RequestBody UserDto.GetUserDto getUserDto, @RequestBody String Inputpw){
+        // 유저 정보 수정
+        return this.userService.UpdateUserInfo(getUserDto, Inputpw);
+
     }
 
 

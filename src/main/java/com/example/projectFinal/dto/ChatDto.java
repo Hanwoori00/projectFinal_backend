@@ -17,5 +17,6 @@ public class ChatDto {
     private String[] messages;
     private Boolean missionSuccess;
     private Integer successNumber;
+    private String emotion;
 
 }

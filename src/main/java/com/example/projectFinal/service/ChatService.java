@@ -24,9 +24,9 @@ public class ChatService {
 	WebClient textClient;
 	public void createConnection() throws IOException {
 		// 서버 코드
-//		GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("/home/ubuntu/.config/gcloud/application_default_credentials.json"));
+		GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("/home/ubuntu/.config/gcloud/application_default_credentials.json"));
 		// 로컬 코드
-		GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
+//		GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
 		oAuthToken = credentials.refreshAccessToken().getTokenValue();
 		String baseUrl_chat = "https://asia-northeast3-aiplatform.googleapis.com/v1/projects/teampj-final/locations/asia-northeast3/publishers/google/models/chat-bison:predict";
 		String baseUrl_text = "https://asia-northeast3-aiplatform.googleapis.com/v1/projects/teampj-final/locations/asia-northeast3/publishers/google/models/text-bison-32k:predict";
@@ -96,9 +96,9 @@ public class ChatService {
 		HttpURLConnection connection = null;
 		try {
 			// 서버 용 json 코드
-//			GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("/home/ubuntu/.config/gcloud/application_default_credentials.json"));
+			GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("/home/ubuntu/.config/gcloud/application_default_credentials.json"));
 			// 로컬 용 테스트 코드
-			GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
+//			GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
 			String oAuthToken = credentials.refreshAccessToken().getTokenValue();
 			URL url = new URL("https://asia-northeast3-aiplatform.googleapis.com/v1/projects/teampj-final/locations/asia-northeast3/publishers/google/models/text-bison-32k:predict");
 			connection = (HttpURLConnection) url.openConnection();

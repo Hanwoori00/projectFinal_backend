@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("message")
+@RequestMapping("/message")
 public class MessageController {
     @Autowired
     MessageRepository messageRepository;
@@ -24,6 +26,8 @@ public class MessageController {
     public String getMessagesByRoomid(@RequestParam String roomid) {
         List<MessageDto> messageDtos = messageRepository.findByRoomid(roomid);
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
         String messages;
         try {
             messages = objectMapper.writeValueAsString(messageDtos);
@@ -41,7 +45,9 @@ public class MessageController {
         List<MessageDto> wrongMessagesDtos = messageRepository.findByRoomidAndGrammarValidIsFalse(roomid);
         String wrongMessages;
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
 
+        System.out.println(wrongMessagesDtos);
         try {
             wrongMessages = objectMapper.writeValueAsString(wrongMessagesDtos);
         } catch (JsonProcessingException e) {

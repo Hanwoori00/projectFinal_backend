@@ -37,6 +37,7 @@ public class MessageService {
                 temp.setContent(content[1]);
                 temp.setGrammarValid(true);
             }
+            System.out.println("what?????????"+temp);
             messageRepository.save(temp);
         }
     };

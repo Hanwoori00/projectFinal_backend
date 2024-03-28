@@ -111,6 +111,7 @@ public class UserService {
 
         User user = this.userRepository.findNicknameFromToken(RefreshToken);
         if(user == null){
+            System.out.println("리프레시 토큰 유저 없음");
             authuserDto.setResult(false);
             authuserDto.setNickname(null);
             authuserDto.setUserId(null);
@@ -144,4 +145,15 @@ public class UserService {
         return this.userRepository.updateProfileImg(awsurl, userid);
     }
 
+    public UserDto.ResDto UpdateUserInfo(UserDto.GetUserDto getUserDto, String inputpw){
+        UserDto.ResDto resDto = new UserDto.ResDto();
+        User user = this.userRepository.findByUserId(getUserDto.getUserId());
+
+        boolean comparePW = bCryptPasswordEncoder.matches(inputpw, user.getPassword());
+
+        if(!comparePW){
+            resDto.setResult(false);
+            resDto.setMsg("비밀번호가 일치하지 않습니다.");
+        }
+    }
 }

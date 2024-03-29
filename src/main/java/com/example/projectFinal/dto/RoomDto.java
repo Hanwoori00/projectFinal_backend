@@ -18,6 +18,7 @@ public class RoomDto {
     private String id;
     private String userid;
     private String ai;
+    private String[] messages;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 }

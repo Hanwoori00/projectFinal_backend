@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.projectFinal.dto.RoomDto;
 import com.example.projectFinal.service.RoomService;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,11 +31,13 @@ public class RoomController {
     @GetMapping("/getRooms")
     @ResponseBody
     public String getRooms(@CookieValue(name = "accessToken", required = false) String accessToken, @CookieValue(name = "RefreshToken", required = false) String RefreshToken) {
+//    public String getRooms(@RequestParam String userid) {
         UserDto.AuthuserDto authuser = this.userService.authuser(accessToken, RefreshToken);
         List<RoomDto> roomDtos = roomService.findAllByUserid(authuser.getUserId());
-
+//        List<RoomDto> roomDtos = roomService.findAllByUserid(userid);
         // ObjectMapper를 사용하여 RoomDto 리스트를 JSON 문자열로 변환
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
         String rooms;
         try {
             rooms = objectMapper.writeValueAsString(roomDtos);

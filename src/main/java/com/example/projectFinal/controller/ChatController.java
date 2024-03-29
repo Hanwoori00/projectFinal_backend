@@ -71,7 +71,7 @@ public class ChatController {
 
             System.out.println("푸 답변" + getAnswerDto.getAiMsg());
 
-            TTSservice.callExternalApi(getAnswerDto.getAiMsg());
+//            TTSservice.callExternalApi(getAnswerDto.getAiMsg());
 
             sendChatDto.setAimsg(getAnswerDto.getAiMsg());
             sendChatDto.setResult(true);
@@ -89,8 +89,8 @@ public class ChatController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        catch (UnsupportedAudioFileException e) {
-            throw new RuntimeException(e);
-        }
+//        catch (UnsupportedAudioFileException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 }

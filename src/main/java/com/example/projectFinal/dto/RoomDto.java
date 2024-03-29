@@ -1,5 +1,6 @@
 package com.example.projectFinal.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonToken;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
@@ -17,5 +18,6 @@ public class RoomDto {
     private String id;
     private String userid;
     private String ai;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 }

@@ -18,7 +18,7 @@ public class RoomService {
     RoomRepository roomRepository;
 
     public List<RoomDto> findAllByUserid(String userid) {
-        List<Room> rooms = roomRepository.findAllById(Collections.singleton(userid));
+        List<Room> rooms = roomRepository.findAllByUserid(userid);
         List<RoomDto> result = new ArrayList<>();
         for (Room room: rooms) {
             RoomDto roomDto = RoomDto.builder()

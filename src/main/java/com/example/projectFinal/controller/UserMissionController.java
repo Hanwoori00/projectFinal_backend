@@ -1,5 +1,6 @@
 package com.example.projectFinal.controller;
 
+import com.example.projectFinal.dto.UserMissionDto;
 import com.example.projectFinal.entity.UserMissionEntity;
 import com.example.projectFinal.service.UserMissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class UserMissionController {
     }
 
     @GetMapping("/missions")
-    public List<UserMissionEntity> getUnusedMissionsForUser(@RequestParam String userId) {
+    public List<UserMissionDto> getUnusedMissionsForUser(@RequestParam String userId) {
         return userMissionService.getUnusedMissionsForUser(userId);
     }
 }

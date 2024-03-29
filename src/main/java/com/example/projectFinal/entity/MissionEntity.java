@@ -14,6 +14,7 @@ public class MissionEntity {
     private String course;
 
     @Id
+    @Column(name = "missionId")
     private String missionId;
 
     @Column(name = "mission")

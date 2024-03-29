@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface UserMissionRepository extends JpaRepository<UserMissionEntity, Integer> {
-    List<UserMissionEntity> findByUserIdAndUsed(User userId, boolean used);
+    List<UserMissionEntity> findByUserIdAndComplete(User userId, boolean complete);
 }

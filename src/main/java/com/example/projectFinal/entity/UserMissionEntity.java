@@ -3,8 +3,10 @@ package com.example.projectFinal.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,7 +26,7 @@ public class UserMissionEntity {
     @JoinColumn(name = "missionId")
     private MissionEntity missionId;
 
-    @Column(name = "used")
-    private boolean used;
+    @Column(name = "complete")
+    private boolean complete;
 
 }

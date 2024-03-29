@@ -1,7 +1,9 @@
 package com.example.projectFinal.controller;
 import com.example.projectFinal.dto.ChatDto;
+import com.example.projectFinal.dto.UserDto;
 import com.example.projectFinal.entity.Room;
 import com.example.projectFinal.service.MessageService;
+import com.example.projectFinal.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.projectFinal.dto.RoomDto;
@@ -21,12 +23,15 @@ public class RoomController {
     @Autowired
     RoomService roomService;
     @Autowired
+    UserService userService;
+    @Autowired
     MessageService messageService;
 
     @GetMapping("/getRooms")
     @ResponseBody
-    public String getRooms(@RequestParam String userid) {
-        List<RoomDto> roomDtos = roomService.findAllByUserid(userid);
+    public String getRooms(@CookieValue(name = "accessToken", required = false) String accessToken, @CookieValue(name = "RefreshToken", required = false) String RefreshToken) {
+        UserDto.AuthuserDto authuser = this.userService.authuser(accessToken, RefreshToken);
+        List<RoomDto> roomDtos = roomService.findAllByUserid(authuser.getUserId());
 
         // ObjectMapper를 사용하여 RoomDto 리스트를 JSON 문자열로 변환
         ObjectMapper objectMapper = new ObjectMapper();
@@ -44,7 +49,9 @@ public class RoomController {
 
     @PostMapping("/newRoom")
     @ResponseBody
-    public String newRoom(@RequestBody Room room) {
+    public String newRoom(@RequestBody Room room, @CookieValue(name = "accessToken", required = false) String accessToken, @CookieValue(name = "RefreshToken", required = false) String RefreshToken) {
+        UserDto.AuthuserDto authuser = this.userService.authuser(accessToken, RefreshToken);
+        room.setUserid(authuser.getUserId());
         Room newRoom = roomService.newRoom(room);
         messageService.addMessagesByRoomId(room, room.getMessages());
         return newRoom.getId();

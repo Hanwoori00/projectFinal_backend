@@ -153,7 +153,7 @@ public class ChatService {
 	}
 
 
-	public String getAnswer(ChatDto chatDto) {
+	public ChatDto getAnswer(ChatDto chatDto) {
 		String[] messages = chatDto.getMessages();
 		Pooh pooh = new Pooh();
 		String msgQuery = makeMessagesQuery(messages);
@@ -174,7 +174,7 @@ public class ChatService {
     String splits[] = content.split(",, ");
 	chatDto.setAiMsg(splits[0]); // Setting the response to chatDto
 	chatDto.setEmotion(splits[1]);
-    return chatDto.getAiMsg() + "," + chatDto.getEmotion();
+    return chatDto;
   }
 	private String makeMessagesQuery(String[] messages) {
 		StringBuilder msgQuery = new StringBuilder();

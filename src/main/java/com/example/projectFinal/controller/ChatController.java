@@ -4,12 +4,10 @@ package com.example.projectFinal.controller;
 import com.example.projectFinal.dto.ChatDto;
 import com.example.projectFinal.dto.UserDto;
 import com.example.projectFinal.service.ChatService;
-import com.example.projectFinal.service.Pooh;
 import com.example.projectFinal.service.TTSService;
 import com.example.projectFinal.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -37,11 +35,6 @@ public class ChatController {
     public ResponseEntity<Map<String, Object>> CheckMission(@RequestBody ChatDto chatDto) {
         Map<String, Object> responseBody = chatService.missionCheck(chatDto);
         return ResponseEntity.ok(responseBody);
-    }
-    @PostMapping("/getAnswer")
-    @ResponseBody
-    public String GetAnswer(@RequestBody ChatDto chatDto) {
-        return chatService.getAnswer(chatDto);
     }
     @PostMapping("/createConnection")
     @ResponseBody
@@ -75,15 +68,16 @@ public class ChatController {
 
             chatDto.setMessages(chatDto.getMessages());
 
-            String aimsg = this.chatService.getAnswer(chatDto);
+            ChatDto getAnswerDto = this.chatService.getAnswer(chatDto);
 
-            System.out.println("푸 답변" + aimsg);
+            System.out.println("푸 답변" + getAnswerDto.getAiMsg());
 
-            TTSservice.callExternalApi(aimsg);
+            TTSservice.callExternalApi(getAnswerDto.getAiMsg());
 
-            sendChatDto.setAimsg(aimsg);
+            sendChatDto.setAimsg(getAnswerDto.getAiMsg());
             sendChatDto.setResult(true);
             sendChatDto.setUserMsg(Arrays.toString(chatDto.getMessages()));
+            sendChatDto.setEmotion(getAnswerDto.getEmotion());
 
             if(!authuser.isResult()){
                 return sendChatDto;

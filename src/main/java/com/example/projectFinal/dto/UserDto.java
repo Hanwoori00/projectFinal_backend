@@ -99,6 +99,7 @@ public class UserDto {
         private String userMsg;
         private String Aimsg;
         private boolean result;
+        private String emotion;
     }
 
     @Data

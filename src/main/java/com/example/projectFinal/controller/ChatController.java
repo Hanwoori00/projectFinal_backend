@@ -89,8 +89,9 @@ public class ChatController {
 
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } catch (UnsupportedAudioFileException e) {
-            throw new RuntimeException(e);
         }
+//        catch (UnsupportedAudioFileException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 }

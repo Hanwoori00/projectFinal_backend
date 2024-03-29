@@ -81,7 +81,6 @@ public class UserDto {
         private String profileImg;
 
         private String roomId;
-
     }
 
     @Builder
@@ -106,6 +105,19 @@ public class UserDto {
     public static class RealloginResDto{
         private boolean result;
         private String msg;
+    }
+
+    @Data
+    public static class UpdateInfoDto{
+        private String userid;
+        private String email;
+        private String inputpw;
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class WithdrawRequest {
+        private String userId;
     }
 
 }

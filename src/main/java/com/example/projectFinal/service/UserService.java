@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -133,7 +134,7 @@ public class UserService {
     }
 
     public boolean CheckDupId(String UserId){
-        return this.userRepository.existsByUserId(UserId);
+        return this.userRepository.existsByUserIdAndDeletedAtIsNotNull(UserId);
 
     }
 
@@ -149,15 +150,87 @@ public class UserService {
         return this.userRepository.updateProfileImg(awsurl, userid);
     }
 
-//    public UserDto.ResDto UpdateUserInfo(UserDto.GetUserDto getUserDto, String inputpw) {
-//        UserDto.ResDto resDto = new UserDto.ResDto();
-//        User user = this.userRepository.findByUserId(getUserDto.getUserId());
-//
-//        boolean comparePW = bCryptPasswordEncoder.matches(inputpw, user.getPassword());
-//
-//        if (!comparePW) {
-//            resDto.setResult(false);
-//            resDto.setMsg("비밀번호가 일치하지 않습니다.");
-//        }
-//    }
+    public UserDto.ResDto changePW(String userid, String inputpw, String email) {
+        UserDto.ResDto resDto = new UserDto.ResDto();
+        try {
+            User user = this.userRepository.findByUserId(userid);
+
+            if (!user.getEmail().equals(email)) {
+                resDto.setResult(false);
+                resDto.setMsg("이메일 정보가 등록된 정보와 일치하지 않습니다.");
+                return resDto;
+            }
+
+            String encryptPw = bCryptPasswordEncoder.encode(inputpw);
+
+            userRepository.updatePW(userid, encryptPw);
+
+            resDto.setResult(true);
+            resDto.setMsg("비밀번호 변경이 완료되었습니다.");
+            return resDto;
+        } catch (Exception e) {
+
+            resDto.setResult(false);
+            resDto.setMsg("비밀번호 변경 중 오류가 발생했습니다.");
+            e.printStackTrace();
+            return resDto;
+        }
+
+    }
+
+    public UserDto.ResDto changeEmail(String userid, String inputpw, String email) {
+        UserDto.ResDto resDto = new UserDto.ResDto();
+        try {
+            User user = this.userRepository.findByUserId(userid);
+
+            boolean comparePW = bCryptPasswordEncoder.matches(inputpw, user.getPassword());
+
+            if(!comparePW){
+                resDto.setResult(false);
+                resDto.setMsg("비밀번호가 일치하지 않습니다");
+                return resDto;
+            }
+
+            userRepository.updateEmail(userid, email);
+
+            resDto.setResult(true);
+            resDto.setMsg("이메일 변경이 완료되었습니다.");
+            return resDto;
+
+        } catch (Exception e) {
+            // 예외 발생 시 처리
+            resDto.setResult(false);
+            resDto.setMsg("이메일 정보 변경 중 에러가 발생하였습니다..");
+            e.printStackTrace();
+            return resDto;
+        }
+
+    }
+    @Transactional
+    public UserDto.ResDto withdraw(String userId) {
+        UserDto.ResDto resDto = new UserDto.ResDto();
+
+        try {
+            System.out.println("회원탈퇴 유저 ID" + userId);
+            // 회원 아이디의 유효성을 검사하고 존재하지 않는 경우 예외 처리
+            if (!userRepository.existsByUserIdAndDeletedAtIsNotNull(userId)) {
+                resDto.setResult(false);
+                resDto.setMsg("회원 아이디가 유효하지 않습니다.");
+                return resDto;
+            }
+
+            // 회원 탈퇴를 위해 softDeleteUserById 메소드 호출
+            userRepository.softDeleteUserById(userId);
+
+            resDto.setResult(true);
+            resDto.setMsg("회원 탈퇴가 완료되었습니다.");
+        } catch (Exception e) {
+            // 예외 발생 시 롤백되도록 처리
+            resDto.setResult(false);
+            resDto.setMsg("회원 탈퇴 중 에러가 발생하였습니다.");
+            e.printStackTrace(); // 예외 정보 로깅
+        }
+
+        return resDto;
+    }
 }

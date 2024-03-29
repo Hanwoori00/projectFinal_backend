@@ -30,7 +30,7 @@ public class TTSService {
 
 
     public void callExternalApi(String text) throws IOException, UnsupportedAudioFileException {
-        String ttsUrl = "https://api.elevenlabs.io/v1/text-to-speech/E8L2AWa6LcM4EdDfLn0G?optimize_streaming_latency=2"; // URL 수정
+        String ttsUrl = "https://api.elevenlabs.io/v1/text-to-speech/c1ClkgJUtAMCJLjXl9ta?optimize_streaming_latency=2"; // URL 수정
 
         // HttpClient 객체 생성
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
@@ -46,7 +46,7 @@ public class TTSService {
             data.put("model_id", "eleven_turbo_v2");
             Map<String, Object> voiceSettings = new HashMap<>();
             voiceSettings.put("stability", 0.5);
-            voiceSettings.put("similarity_boost", 0.7);
+            voiceSettings.put("similarity_boost", 0.6);
             voiceSettings.put("style", 0.25);
             voiceSettings.put("use_speaker_boost", true);
             data.put("voice_settings", voiceSettings);

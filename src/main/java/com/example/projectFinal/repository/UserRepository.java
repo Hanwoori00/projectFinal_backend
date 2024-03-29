@@ -9,7 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface UserRepository extends JpaRepository<User, String> {
-    boolean existsByUserId(String userid);
+    boolean existsByUserIdAndDeletedAtIsNotNull(String userid);
+
     boolean existsByNickname(String nickname);
 
     User findByNickname(String nickname);
@@ -34,5 +35,22 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Transactional
     @Query("SELECT u FROM User u WHERE u.refresh_key = :refreshToken")
     User findNicknameFromToken(@Param("refreshToken") String refreshToken);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE User e SET e.password = :encryptPw WHERE e.userId = :userid")
+    void updatePW(@Param("userid") String userid, @Param("encryptPw") String encryptPw);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE User e SET e.email = :email WHERE e.userId = :userid")
+    void updateEmail(@Param("userid") String userid, @Param("email") String email);
+
+
+    @Transactional
+    @Modifying
+    @Query("update User u set u.deletedAt = CURRENT_TIMESTAMP where u.userId = :userId")
+    void softDeleteUserById(@Param("userId") String userId);
+
 
 }

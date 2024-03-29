@@ -219,7 +219,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/info")
+    @GetMapping("/info")
     public UserDto.GetUserDto getUserInfo(@CookieValue(name = "accessToken", required = false) String accessToken, @CookieValue(name = "RefreshToken", required = false) String RefreshToken) {
         UserDto.GetUserDto getUserDto = new UserDto.GetUserDto();
         try {
@@ -242,12 +242,22 @@ public class UserController {
         }
     }
 
-//    @PatchMapping("/info")
-//    public UserDto.ResDto UpdateUserInfo(@RequestBody UserDto.GetUserDto getUserDto, @RequestBody String Inputpw){
-//        // 유저 정보 수정
-//        return this.userService.UpdateUserInfo(getUserDto, Inputpw);
-//
-//    }
+    @PatchMapping("/changePW")
+    public UserDto.ResDto changePW(@RequestBody UserDto.UpdateInfoDto updateInfoDto){
+        // 유저 정보 수정
+        return this.userService.changePW(updateInfoDto.getUserid(), updateInfoDto.getInputpw(), updateInfoDto.getEmail());
+    }
+
+    @PatchMapping("/changeEmail")
+    public UserDto.ResDto changeEmail(@RequestBody UserDto.UpdateInfoDto updateInfoDto){
+        // 유저 정보 수정
+        return this.userService.changeEmail(updateInfoDto.getUserid(), updateInfoDto.getInputpw(), updateInfoDto.getEmail());
+    }
+
+    @DeleteMapping("/withdraw")
+    public UserDto.ResDto withdraw(@RequestBody UserDto.WithdrawRequest withdrawRequest){
+        return userService.withdraw(withdrawRequest.getUserId());
+    }
 
 
 }

@@ -220,12 +220,12 @@ public class UserController {
 
 
     @PostMapping("/info")
-    public UserDto.GetUserDto getUserInfo(HttpServletResponse response, @CookieValue(name = "accessToken", required = false) String accessToken, @CookieValue(name = "RefreshToken", required = false) String RefreshToken) {
+    public UserDto.GetUserDto getUserInfo(@CookieValue(name = "accessToken", required = false) String accessToken, @CookieValue(name = "RefreshToken", required = false) String RefreshToken) {
         UserDto.GetUserDto getUserDto = new UserDto.GetUserDto();
         try {
             UserDto.AuthuserDto authuser = this.userService.authuser(accessToken, RefreshToken);
 
-            User user = this.userService.getUserDto(authuser.getNickname());
+            User user = this.userService.getUserDto(authuser.getUserId());
 
             getUserDto.setResult(true);
             getUserDto.setUserId(user.getUserId());

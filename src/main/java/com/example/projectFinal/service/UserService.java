@@ -142,7 +142,7 @@ public class UserService {
     }
 
     public User getUserDto(String nickname){
-        return this.userRepository.findByNickname(nickname);
+        return this.userRepository.findByUserId(nickname);
     }
 
     public boolean uploadProfileImg(String awsurl, String userid){

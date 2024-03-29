@@ -18,5 +18,6 @@ public class ChatDto {
     private Boolean missionSuccess;
     private Integer successNumber;
     private String emotion;
-
 }
+
+

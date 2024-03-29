@@ -239,12 +239,12 @@ public class UserController {
         }
     }
 
-    @PatchMapping("/info")
-    public UserDto.ResDto UpdateUserInfo(@RequestBody UserDto.GetUserDto getUserDto, @RequestBody String Inputpw){
-        // 유저 정보 수정
-        return this.userService.UpdateUserInfo(getUserDto, Inputpw);
-
-    }
+//    @PatchMapping("/info")
+//    public UserDto.ResDto UpdateUserInfo(@RequestBody UserDto.GetUserDto getUserDto, @RequestBody String Inputpw){
+//        // 유저 정보 수정
+//        return this.userService.UpdateUserInfo(getUserDto, Inputpw);
+//
+//    }
 
 
 }

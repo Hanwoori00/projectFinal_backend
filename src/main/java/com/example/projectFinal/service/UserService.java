@@ -145,15 +145,15 @@ public class UserService {
         return this.userRepository.updateProfileImg(awsurl, userid);
     }
 
-    public UserDto.ResDto UpdateUserInfo(UserDto.GetUserDto getUserDto, String inputpw){
-        UserDto.ResDto resDto = new UserDto.ResDto();
-        User user = this.userRepository.findByUserId(getUserDto.getUserId());
-
-        boolean comparePW = bCryptPasswordEncoder.matches(inputpw, user.getPassword());
-
-        if(!comparePW){
-            resDto.setResult(false);
-            resDto.setMsg("비밀번호가 일치하지 않습니다.");
-        }
-    }
+//    public UserDto.ResDto UpdateUserInfo(UserDto.GetUserDto getUserDto, String inputpw) {
+//        UserDto.ResDto resDto = new UserDto.ResDto();
+//        User user = this.userRepository.findByUserId(getUserDto.getUserId());
+//
+//        boolean comparePW = bCryptPasswordEncoder.matches(inputpw, user.getPassword());
+//
+//        if (!comparePW) {
+//            resDto.setResult(false);
+//            resDto.setMsg("비밀번호가 일치하지 않습니다.");
+//        }
+//    }
 }

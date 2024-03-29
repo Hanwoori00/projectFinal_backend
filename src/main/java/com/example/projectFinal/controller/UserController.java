@@ -194,14 +194,17 @@ public class UserController {
 
                 authuserDto.setResult(true);
                 authuserDto.setNickname(authuser.getNickname());
+                authuserDto.setUserId(authuser.getUserId());
 
                 System.out.println("컨트롤러에서 쿠키 확인" + accessToken + " refresh  " + RefreshToken);
+                System.out.println("유저 ID" + authuser.getUserId());
 
                 return authuserDto;
             }
 
             authuserDto.setResult(true);
             authuserDto.setNickname(authuser.getNickname());
+            authuserDto.setUserId(authuser.getUserId());
 
             System.out.println("컨트롤러에서 쿠키 확인" + accessToken + " refresh  " + RefreshToken);
 

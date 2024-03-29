@@ -103,8 +103,11 @@ public class UserService {
 
             User user = this.userRepository.findByUserId(validToken.getMsg());
 
+            System.out.println("유저 아이디" + validToken.getMsg());
+
             authuserDto.setResult(true);
             authuserDto.setNickname(user.getNickname());
+            authuserDto.setUserId(validToken.getMsg());
 
             return authuserDto;
         }
@@ -123,6 +126,7 @@ public class UserService {
 
         authuserDto.setNickname(user.getNickname());
         authuserDto.setNewToken(tokenDto.getAccessToken());
+        authuserDto.setUserId(user.getUserId());
         authuserDto.setResult(true);
 
         return authuserDto;

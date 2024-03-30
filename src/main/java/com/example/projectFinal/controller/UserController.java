@@ -256,8 +256,24 @@ public class UserController {
     }
 
     @DeleteMapping("/withdraw")
-    public UserDto.ResDto withdraw(@RequestBody UserDto.WithdrawRequest withdrawRequest){
-        return userService.withdraw(withdrawRequest.getUserId());
+    public UserDto.ResDto withdraw(HttpServletResponse response,@RequestBody UserDto.WithdrawRequest withdrawRequest){
+        UserDto.ResDto resDto = userService.withdraw(withdrawRequest.getUserId());
+
+        Cookie AccessCookie = new Cookie("accessToken", null);
+        AccessCookie.setMaxAge(0);
+        AccessCookie.setPath("/");
+        AccessCookie.setHttpOnly(true);
+        response.addHeader("Access-Control-Allow-Credentials", "true");
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addCookie(AccessCookie);
+
+        Cookie Refreshcookie = new Cookie("RefreshToken", null);
+        Refreshcookie.setMaxAge(0);
+        Refreshcookie.setPath("/");
+        Refreshcookie.setHttpOnly(true);
+        response.addCookie(Refreshcookie);
+
+        return resDto;
     }
 
 

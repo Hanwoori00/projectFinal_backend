@@ -1,15 +1,32 @@
 package com.example.projectFinal.service;
 
 public class PracticeAi {
-    public String context = """
+    public String topic1, topic2 = """
+            주제는 남녀간의 사랑과 관계 되어야 해.
+            """;
+    public String topic3, topic4 = """
+            주제는 가족과 관계 되어야 해.
+            """;
+    public String topic5, topic6 = """
+            주제는 학교생활과 관계 되어야 해.
+            """;
+    public String topic7, topic8 = """
+            주제는 직장 생활과 관계 되어야 해.
+            """;
+    public String topic9, topic0 = """
+            주제는 취미와 관계 되어야 해.
+            """;
+    public String common_context1 = """
 너에게 영어 표현을 줄거야. 
 이 영어표현을 통해 영어 회화 공부를 하는데 도움이 되는 문장과 대화를 나에게 넘겨줘.
-먼저 그 표현을 사용한 문장 세개를 줘. 
-이 문장들은 주로 취미나 학교, 가족, 친구 등의 특수한 상황을 랜덤하게 반영해줘.
+먼저 그 표현을 사용한 문장 세개를 줘.
+""";
+    public String common_context2 = """
 그리고 나서 그 두 문장으로 구성된 대화를 하나 줘. 
 이때 그 표현은 두 문장중 한 문장에만 포함시켜.
 첫번째 문장에 포함시켜도 되고 두번째 문장에 포함시켜도 돼.
-이 대화는 주로 학교나 친구, 회사, 모임, 클럽, 취미 등의 특수한 상황을 반영해줘.
+대화의 """;
+    public String common_context3 = """
 그리고 이 모든걸 쉼표로 나누어 다섯개의 parameter로 읽힐수 있도록 보내줘. 
 반드시 너는 나에게 총 다섯개의 문장만 보내줘야해. 
 그리고 각 다섯문장 뒤에는 괄호가 열리고 그 안에 한국어로 해석된 문장이 뒤따라서 짝을 이루어야해. 

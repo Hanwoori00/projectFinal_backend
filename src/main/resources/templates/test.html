@@ -18,6 +18,8 @@
 <button onclick="finishChat()">Finish</button>
 <button onclick="newRoom()">CreateRoom</button>
 <button onclick="checkMessages()">CheckMessages</button>
+<button onclick="getPractice()">getPractice</button>
+<button onclick="getRooms()">getRooms</button>
 <br>
 <h3>Grammar Check</h3>
 <ul id="messageHistory"></ul>
@@ -33,21 +35,45 @@
     var responseTimes = [];
     var messageCount = 0;
     var roomid;
-    window.onload = function() {
-        axios.post('/chat/createConnection')
-        .then(function(response) {
-            console.log(response.data)})
-        .catch(function (error) {
-            console.error('에러 발생:', error);
-    })
-    }
-    function checkMessages() {
-        axios.get('/message/getMessagesByRoomid', {
-            roomid : roomid
+<!--    window.onload = function() {-->
+<!--        axios.post('/chat/createConnection')-->
+<!--        .then(function(response) {-->
+<!--            console.log(response.data)})-->
+<!--        .catch(function (error) {-->
+<!--            console.error('에러 발생:', error);-->
+<!--    })-->
+<!--    }-->
+
+    function getRooms() {
+        axios.get('/room/getRooms', {
+            params: {
+                userid : 'poohpooh12'
+            }
         }).then(function (response) {
             console.log(response.data);
-            var msgArr = Json.parse(response.data);
-            console.log(msgArr[0]);
+        })
+    }
+    function getPractice() {
+        axios.get('/practice/getPractice', {
+            params: {
+                expression : "Are you going to ...?",
+                meaning : "(~할 거에요/가려고 하는 중이에요?)",
+                level : 0
+            }
+        }).then(function (response) {
+            console.log(response.data);
+        })
+
+    }
+
+
+    function checkMessages() {
+        axios.get('/message/wrongMessages', {
+            params: {
+                roomid : roomid
+        }
+        }).then(function (response) {
+            console.log(response.data);
         })
     }
     function newRoom() {
@@ -150,7 +176,7 @@
         extraMessageItem.textContent = extraMessage;
         messageList.appendChild(extraMessageItem);
     }
-}
+    }
     function updateAverage(time) {
         var currentAverage = calculateAverage(responseTimes);
         var newAverage = ((currentAverage * (messageCount - 1)) + time) / messageCount;

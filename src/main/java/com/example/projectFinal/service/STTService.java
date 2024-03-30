@@ -31,6 +31,7 @@ public class STTService {
                     .setEncoding(RecognitionConfig.AudioEncoding.ENCODING_UNSPECIFIED)
                     .setLanguageCode("en-US")
                     .setSampleRateHertz(48000)
+                    .setEnableAutomaticPunctuation(true)
                     .build();
 
             RecognitionAudio audio = RecognitionAudio.newBuilder()

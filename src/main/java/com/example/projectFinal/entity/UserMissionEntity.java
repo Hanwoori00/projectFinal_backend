@@ -29,4 +29,7 @@ public class UserMissionEntity {
     @Column(name = "complete")
     private boolean complete;
 
+    @Column(name = "learn")
+    private boolean learn;
+
 }

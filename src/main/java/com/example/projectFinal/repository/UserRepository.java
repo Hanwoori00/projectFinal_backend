@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface UserRepository extends JpaRepository<User, String> {
-    boolean existsByUserIdAndDeletedAtIsNotNull(String userid);
+    boolean existsByUserId(String userid);
 
     boolean existsByNickname(String nickname);
 
@@ -46,11 +46,13 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Query("UPDATE User e SET e.email = :email WHERE e.userId = :userid")
     void updateEmail(@Param("userid") String userid, @Param("email") String email);
 
+    @Transactional
+    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM User u WHERE u.userId = :userId AND u.deletedAt IS NULL")
+    boolean selectUserid(@Param("userId") String userId);
 
     @Transactional
     @Modifying
     @Query("update User u set u.deletedAt = CURRENT_TIMESTAMP where u.userId = :userId")
     void softDeleteUserById(@Param("userId") String userId);
-
 
 }

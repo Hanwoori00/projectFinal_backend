@@ -134,7 +134,7 @@ public class UserService {
     }
 
     public boolean CheckDupId(String UserId){
-        return this.userRepository.existsByUserIdAndDeletedAtIsNotNull(UserId);
+        return this.userRepository.existsByUserId(UserId);
 
     }
 
@@ -213,7 +213,7 @@ public class UserService {
         try {
             System.out.println("회원탈퇴 유저 ID" + userId);
             // 회원 아이디의 유효성을 검사하고 존재하지 않는 경우 예외 처리
-            if (!userRepository.existsByUserIdAndDeletedAtIsNotNull(userId)) {
+            if (!userRepository.existsByUserId(userId)) {
                 resDto.setResult(false);
                 resDto.setMsg("회원 아이디가 유효하지 않습니다.");
                 return resDto;

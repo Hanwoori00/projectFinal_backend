@@ -11,6 +11,10 @@ import java.sql.Timestamp;
 @Getter @Setter
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_num", nullable = false)
+    private Long user_num;
+
     @Column(name = "userId", nullable = false)
     private String userId;
 

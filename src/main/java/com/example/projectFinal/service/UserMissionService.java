@@ -77,7 +77,7 @@ public class UserMissionService {
 
         // 학습 false 미션 가져오기
         List<UserMissionEntity> unLearnMissions =
-                userMissionRepository.findByUserIdAndLearn(user, false);
+                userMissionRepository.findByUserIdAndLearnAndMissionId_Course(user, false, course);
 
         if (unLearnMissions.isEmpty()) {
             return Collections.emptyList();

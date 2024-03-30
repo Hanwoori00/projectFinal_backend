@@ -1,5 +1,6 @@
 package com.example.projectFinal.service;
 
+import com.example.projectFinal.dto.UserDto;
 import com.example.projectFinal.dto.UserMissionDto;
 import com.example.projectFinal.entity.MissionEntity;
 import com.example.projectFinal.entity.User;
@@ -27,12 +28,16 @@ public class UserMissionService {
     @Autowired
     UserMissionRepository userMissionRepository;
 
-    public void addUserMissionsForCourse(String course, String userId) {
+    @Autowired
+    UserService userService;
+
+    public void addUserMissionsForCourse(String course, String accessToken, String refreshToken) {
+        UserDto.AuthuserDto authuserDto = userService.authuser(accessToken, refreshToken);
+
         // user 찾기
+        String userId = authuserDto.getUserId();
         User user = userRepository.findByUserId(userId);
-        if (user == null) {
-            return;
-        }
+
 
         // 선택한 코스에 해당하는 미션 데이터
         List<MissionEntity> missions = missionRepository.findByCourse(course);
@@ -50,12 +55,12 @@ public class UserMissionService {
     }
 
 
-    public List<UserMissionDto> getUnusedMissionsForUser(String userId) {
+    public List<UserMissionDto> getUnusedMissionsForUser(String accessToken, String refreshToken) {
+        UserDto.AuthuserDto authuserDto = userService.authuser(accessToken, refreshToken);
+
         // user 찾기
+        String userId = authuserDto.getUserId();
         User user = userRepository.findByUserId(userId);
-        if (user == null) {
-            return Collections.emptyList();
-        }
 
         // 사용하지 않은 미션 가져오기
         List<UserMissionEntity> unusedMissions = userMissionRepository.findByUserIdAndComplete(user, false);

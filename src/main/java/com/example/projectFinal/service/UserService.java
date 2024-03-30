@@ -31,21 +31,26 @@ public class UserService {
         this.tokenProvider = tokenProvider;
     }
 
-    public ResponseEntity<User> SignUp(UserDto.RegisterDto registerDto) {
+    public UserDto.RegisterResDto register(UserDto.RegisterDto registerDto) {
+        User user = new User();
+        UserDto.RegisterResDto registerResDto = new UserDto.RegisterResDto();
         try {
-            User user = new User();
             user.setUserId(registerDto.getUserId());
             String encryptPw = bCryptPasswordEncoder.encode(registerDto.getPassword());
             user.setPassword(encryptPw);
             user.setEmail(registerDto.getEmail());
             User result = userRepository.save(user);
             System.out.println("회원가입 결과: " + result);
-            return ResponseEntity.ok(result);
+            registerResDto.setResult(true);
+            registerResDto.setUserId(registerDto.getUserId());
+            registerResDto.setEmail(registerDto.getEmail());
+            registerResDto.setPassword(encryptPw);
+            return registerResDto;
         } catch (Exception e) {
+            System.out.println("회원 가입 진행 중 에러 발생 " + e);
 
-            log.error("Signup error", e);
-
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            registerResDto.setResult(false);
+            return registerResDto;
         }
     }
 

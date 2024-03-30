@@ -21,9 +21,8 @@ public class PracticeController {
 
     @GetMapping("/getPractice")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> getPractice(@RequestParam String expression) throws IOException {
-        Map<String, Object> responseBody = practiceService.getPractice(expression);
-        System.out.println(responseBody);
+    public ResponseEntity<Map<String, Object>> getPractice(@RequestParam String expression, String meaning, Integer level) throws IOException {
+        Map<String, Object> responseBody = practiceService.getPractice(expression, meaning, level);
         return ResponseEntity.ok(responseBody);
         //이런 형식으로 올거임.
 //          {

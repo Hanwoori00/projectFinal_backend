@@ -34,6 +34,10 @@ public class UserMissionService {
     public void addUserMissionsForCourse(String course, String accessToken, String refreshToken) {
         UserDto.AuthuserDto authuserDto = userService.authuser(accessToken, refreshToken);
 
+        if (!authuserDto.isResult()) {
+            return;
+        }
+
         // user 찾기
         String userId = authuserDto.getUserId();
         User user = userRepository.findByUserId(userId);
@@ -57,6 +61,9 @@ public class UserMissionService {
 
     public List<UserMissionDto> getUnusedMissionsForUser(String accessToken, String refreshToken) {
         UserDto.AuthuserDto authuserDto = userService.authuser(accessToken, refreshToken);
+        if (!authuserDto.isResult()) {
+            return Collections.emptyList();
+        }
 
         // user 찾기
         String userId = authuserDto.getUserId();

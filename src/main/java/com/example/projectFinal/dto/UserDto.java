@@ -16,7 +16,18 @@ public class UserDto {
 
         private String email;
 
-        @Nullable private String nickname;
+    }
+
+    @NoArgsConstructor
+    @Data
+    public static class RegisterResDto{
+        private boolean result;
+
+        private String userId;
+
+        private String password;
+
+        private String email;
 
     }
 

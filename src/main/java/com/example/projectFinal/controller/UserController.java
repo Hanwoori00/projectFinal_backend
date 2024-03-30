@@ -43,9 +43,10 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public User register(@RequestBody UserDto.RegisterDto registerDto) {
+    public UserDto.RegisterResDto register(@RequestBody UserDto.RegisterDto registerDto) {
+        System.out.println("회원 가입 요청");
         try {
-            return userService.SignUp(registerDto).getBody();
+            return this.userService.register(registerDto);
         } catch (Exception e) {
             System.out.println("회원 가입 실패: " + e.getMessage());
             return null;

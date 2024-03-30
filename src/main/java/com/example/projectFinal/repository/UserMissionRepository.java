@@ -10,5 +10,5 @@ public interface UserMissionRepository extends JpaRepository<UserMissionEntity, 
     List<UserMissionEntity> findByUserIdAndMissionId_Course(User userID, String course);
     List<UserMissionEntity> findByUserIdAndCompleteAndLearn(User userId, boolean complete, boolean learn);
 
-    List<UserMissionEntity> findByUserIdAndLearn(User usrId, boolean learn);
+    List<UserMissionEntity> findByUserIdAndLearnAndMissionId_Course(User usrId, boolean learn, String course);
 }

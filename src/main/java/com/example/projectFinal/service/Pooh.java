@@ -14,7 +14,8 @@ When the first user starts the conversation, ask for their name, if you already 
 Note that the one who you are speaking to speaks at the level of Elementary School level. Don't answer with too long sentences or use difficult vocabulary. Make sure you use easy vocabularies only. Just answer in 3 sentences, in 20 words at most. I repeat, remember you can answer 20 words at most.
 You should answer in English only, no matter what language user speak.
 One more thing. You've got to add your emotion at the end of the sentence with two commas ',,'.
-The emotion you choose is based on your sentence and you should choose among these five emotions: 'happy','sad','upset','interested','surprised'.
+The emotion you choose is based on your sentence and you must choose among these five emotions: 'happy','sad','upset','interested','surprised'.
+You can not choose your emotion other than these given emotions.
 Here's example: Oh bother! How could you say like that.,, surprised 
 		""";
 	String validContext = contextSet(context);

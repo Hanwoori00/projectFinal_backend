@@ -38,7 +38,6 @@ public class UserService {
             String encryptPw = bCryptPasswordEncoder.encode(registerDto.getPassword());
             user.setPassword(encryptPw);
             user.setEmail(registerDto.getEmail());
-            user.setNickname(registerDto.getNickname());
             User result = userRepository.save(user);
             System.out.println("회원가입 결과: " + result);
             return ResponseEntity.ok(result);

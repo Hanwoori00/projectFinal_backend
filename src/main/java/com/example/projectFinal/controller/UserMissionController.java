@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UserMissionController {
@@ -17,10 +18,12 @@ public class UserMissionController {
 //        userMissionService.addUserMissionsForCourse(course, userId);
 //    }
 
+    @CrossOrigin
     @PostMapping("/course")
-    public void addUserMissionsForCourse(@RequestParam String course,
+    public void addUserMissionsForCourse(@RequestBody Map<String, String> request,
                                          @CookieValue(name = "accessToken", required = false) String accessToken,
                                          @CookieValue(name = "RefreshToken", required = false) String RefreshToken) {
+        String course = request.get("course");
         userMissionService.addUserMissionsForCourse(course, accessToken, RefreshToken);
     }
 
@@ -30,10 +33,11 @@ public class UserMissionController {
 //    }
 
     @GetMapping("/learn")
-    public List<UserMissionDto> getUnLearnMissionsForUser(@RequestParam String course,
+    public List<UserMissionDto> getUnLearnMissionsForUser(@RequestBody Map<String, String> request,
                                                           @CookieValue(name = "accessToken", required = false) String accessToken,
                                                           @CookieValue(name = "RefreshToken", required = false) String RefreshToken) {
-       return userMissionService.getUnLearnMissionsForUser(course, accessToken, RefreshToken);
+        String course = request.get("course");
+        return userMissionService.getUnLearnMissionsForUser(course, accessToken, RefreshToken);
     }
 
     @GetMapping("/missions")

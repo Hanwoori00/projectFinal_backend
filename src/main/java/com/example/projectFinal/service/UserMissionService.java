@@ -181,8 +181,8 @@ public class UserMissionService {
                         + "  \"topP\": 0.95,\n"
                         + "  \"topK\": 1\n"
                         + "}";
-        String project = "teamPJ-Final";
-        String location = "us-central1";
+        String project = "teampj-final";
+        String location = "asia-northeast3";
         String publisher = "google";
         String model = "text-bison@002";
 

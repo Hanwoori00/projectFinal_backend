@@ -33,10 +33,9 @@ public class UserMissionController {
 //    }
 
     @GetMapping("/learn")
-    public List<UserMissionDto> getUnLearnMissionsForUser(@RequestBody Map<String, String> request,
+    public List<UserMissionDto> getUnLearnMissionsForUser(@RequestParam String course,
                                                           @CookieValue(name = "accessToken", required = false) String accessToken,
                                                           @CookieValue(name = "RefreshToken", required = false) String RefreshToken) {
-        String course = request.get("course");
         return userMissionService.getUnLearnMissionsForUser(course, accessToken, RefreshToken);
     }
 

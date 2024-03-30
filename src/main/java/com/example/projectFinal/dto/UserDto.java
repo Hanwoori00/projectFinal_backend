@@ -8,8 +8,7 @@ import java.sql.Timestamp;
 public class UserDto {
 
     @NoArgsConstructor
-    @Getter
-
+    @Data
     public static class RegisterDto{
         private String userId;
 
@@ -17,7 +16,7 @@ public class UserDto {
 
         private String email;
 
-        private String nickname;
+        @Nullable private String nickname;
 
     }
 

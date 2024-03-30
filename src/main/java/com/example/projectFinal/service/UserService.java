@@ -57,7 +57,13 @@ public class UserService {
     public UserDto.LoginResDto Login(UserDto.LoginDto loginDto){
         User user = userRepository.findByUserId(loginDto.getUserId());
         UserDto.LoginResDto result = new UserDto.LoginResDto();
+
         if(user.getUserId() != null){
+            if(user.getDeletedAt() == null){
+                result.setResult(false);
+                result.setMsg("탈퇴한 계정의 아이디입니다.");
+                return result;
+            }
 
 //            비밀번호 일치 여부 확인
             boolean comparePW = bCryptPasswordEncoder.matches(loginDto.getPassword(), user.getPassword());

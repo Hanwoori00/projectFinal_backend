@@ -8,12 +8,25 @@ import com.example.projectFinal.entity.UserMissionEntity;
 import com.example.projectFinal.repository.MissionRepository;
 import com.example.projectFinal.repository.UserMissionRepository;
 import com.example.projectFinal.repository.UserRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.gax.core.FixedCredentialsProvider;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.aiplatform.v1beta1.EndpointName;
+import com.google.cloud.aiplatform.v1beta1.PredictResponse;
+import com.google.cloud.aiplatform.v1beta1.PredictionServiceClient;
+import com.google.cloud.aiplatform.v1beta1.PredictionServiceSettings;
+import com.google.protobuf.Value;
+import com.google.protobuf.util.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserMissionService {
@@ -154,4 +167,104 @@ public class UserMissionService {
 //        return unusedMissions.stream().limit(3).collect(Collectors.toList());
 //
 //    }
+
+
+    public String textPrompt(String data) throws IOException {
+        String prompt = makePrompt(data);
+        String instance =
+                "{ \"prompt\": " + "\"Check which expression from the missions the chat corresponds to and return the corresponding mission_id(s) as an Array. If no matching missions are found or if the chat sentence does not exactly match the expression from any of the missions, return none." +
+                        prompt + "\"}";
+        String parameters =
+                "{\n"
+                        + "  \"temperature\": 0.2,\n"
+                        + "  \"maxOutputTokens\": 256,\n"
+                        + "  \"topP\": 0.95,\n"
+                        + "  \"topK\": 1\n"
+                        + "}";
+        String project = "teamPJ-Final";
+        String location = "us-central1";
+        String publisher = "google";
+        String model = "text-bison@002";
+
+        // 인증 파일의 경로를 설정합니다.
+        String credentialsPath = "/home/ubuntu/.config/gcloud/application_default_credentials.json";
+
+        return predictTextPrompt(instance, parameters, project, location, publisher, model, credentialsPath);
+    }
+
+    public String makePrompt(String data) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            JsonNode jsonNode = objectMapper.readTree(data);
+
+            StringBuilder sb = new StringBuilder();
+            for (JsonNode missionNode : jsonNode.get("missions")) {
+                String missionId = missionNode.get("mission_id").asText();
+                String mission = missionNode.get("mission").asText();
+                sb.append("mission_id: ").append(missionId).append("\n")
+                        .append("mission: ").append(mission).append("\n\n");
+            }
+
+            String chat = jsonNode.get("chat").asText();
+
+            sb.append("chat: ").append(chat);
+//            System.out.println(sb);
+
+            return sb.toString();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+    public String predictTextPrompt(
+            String instance,
+            String parameters,
+            String project,
+            String location,
+            String publisher,
+            String model,
+            String credentialsPath
+    ) throws IOException {
+        // PredictionServiceClient를 생성하기 위한 설정을 구성합니다.
+        PredictionServiceSettings predictionServiceSettings =
+                PredictionServiceSettings.newBuilder()
+                        .setEndpoint(location + "-aiplatform.googleapis.com:443")
+                        .setCredentialsProvider(FixedCredentialsProvider.create(
+                                GoogleCredentials.fromStream(new FileInputStream(credentialsPath))
+                        ))
+                        .build();
+
+        try (PredictionServiceClient predictionServiceClient =
+                     PredictionServiceClient.create(predictionServiceSettings)) {
+            final EndpointName endpointName =
+                    EndpointName.ofProjectLocationPublisherModelName(project, location, publisher, model);
+
+            com.google.protobuf.Value.Builder instanceValue = com.google.protobuf.Value.newBuilder();
+            JsonFormat.parser().merge(instance, instanceValue);
+            List<com.google.protobuf.Value> instances = new ArrayList<>();
+            instances.add(instanceValue.build());
+
+            Value.Builder parameterValueBuilder = com.google.protobuf.Value.newBuilder();
+            JsonFormat.parser().merge(parameters, parameterValueBuilder);
+            Value parameterValue = parameterValueBuilder.build();
+
+            PredictResponse predictResponse =
+                    predictionServiceClient.predict(endpointName, instances, parameterValue);
+
+            for (Value prediction : predictResponse.getPredictionsList()) {
+                if (prediction.getKindCase() == Value.KindCase.STRUCT_VALUE) {
+                    Map<String, Value> predictionMap = prediction.getStructValue().getFieldsMap();
+
+                    if (predictionMap.containsKey("content")) {
+                        return predictionMap.get("content").getStringValue();
+                    }
+                }
+            }
+
+            return null;
+        }
+    }
 }

@@ -3,8 +3,10 @@ package com.example.projectFinal.controller;
 import com.example.projectFinal.dto.UserMissionDto;
 import com.example.projectFinal.service.UserMissionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -53,4 +55,15 @@ public class UserMissionController {
 //
 //        return ResponseEntity.ok().build();
 //    }
+
+    @PostMapping("/checkMission")
+    public ResponseEntity<String> checkMission(@RequestBody String postData) throws IOException {
+        System.out.println("Received data from client: " + postData);
+
+        // 데이터 처리 로직
+//        missionService.makePrompt(postData);
+        String response = userMissionService.textPrompt(postData);
+
+        return ResponseEntity.ok(response);
+    }
 }

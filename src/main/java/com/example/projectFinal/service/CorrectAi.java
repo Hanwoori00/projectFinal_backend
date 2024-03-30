@@ -18,7 +18,7 @@ public class CorrectAi {
             user: I'm Joseph. What are your name? -> What is your name?
             pooh: Oh, how lovely to meet you, Joseph! My name is Pooh, silly old bear. What a beautiful day, isn't it?
             
-            
+            Make sure you must find errors among sentence beginning with 'user' only. Do not ever ones that don't begin with 'user'.
             But here's some exceptions(don't be too strict).
             'I can't', 'Good' can be considered uncompleted sentence, but as far as it can be considered to be skipped, just leave it.
             And don't mind marks. Just focus on letters. Don't need to change 'Good!' into 'Good.'

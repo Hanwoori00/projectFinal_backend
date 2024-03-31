@@ -21,7 +21,7 @@ public class MessageService {
             temp.setAi(room.getAi());
             String[] content = message.split(": ");
 
-            if (content[0].contains(" user")) {//유저면
+            if (content[0].contains("user")) {//유저면
                 temp.setUserSpeaking(true);
                 if(content[1].contains("->")) { // 교정받은거
                     temp.setGrammarValid(false);

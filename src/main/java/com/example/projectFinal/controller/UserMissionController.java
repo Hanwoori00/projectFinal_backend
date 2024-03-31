@@ -41,6 +41,14 @@ public class UserMissionController {
         return userMissionService.getUnLearnMissionsForUser(course, accessToken, RefreshToken);
     }
 
+    @PostMapping("/learned")
+    public void setLearnMissionsForUser(@RequestBody Map<String, String> request,
+                            @CookieValue(name = "accessToken", required = false) String accessToken,
+                            @CookieValue(name = "RefreshToken", required = false) String RefreshToken) {
+        String missionId = request.get("mission_id");
+        userMissionService.setLearnMissionsForUser(accessToken, RefreshToken, missionId);
+    }
+
     @GetMapping("/missions")
     public List<UserMissionDto> getUncompletedMissionsForUser(@CookieValue(name = "accessToken", required = false) String accessToken,
                                                               @CookieValue(name = "RefreshToken", required = false) String RefreshToken) {

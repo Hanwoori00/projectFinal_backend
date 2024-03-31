@@ -43,7 +43,7 @@ public class UserMissionService {
     @Autowired
     UserService userService;
 
-    // course 선택 -> user_mission 테이블에 데이터 추가
+    // 학습하기 : course 선택 -> user_mission 테이블에 데이터 추가
     public void addUserMissionsForCourse(String course, String accessToken, String refreshToken) {
         UserDto.AuthuserDto authuserDto = userService.authuser(accessToken, refreshToken);
 
@@ -78,7 +78,7 @@ public class UserMissionService {
 
     }
 
-    // 학습하기 미션
+    // 학습하기 : 프론트로 문장 전송
     public List<UserMissionDto> getUnLearnMissionsForUser(String course, String accessToken, String refreshToken) {
         UserDto.AuthuserDto authuserDto = userService.authuser(accessToken, refreshToken);
         if (!authuserDto.isResult()) {
@@ -115,7 +115,35 @@ public class UserMissionService {
 
     }
 
-    // 채팅창 미션
+    // 학습하기 : 학습 완료
+    public void setLearnMissionsForUser(String accessToken, String refreshToken, String missionId) {
+        UserDto.AuthuserDto authuserDto = userService.authuser(accessToken, refreshToken);
+        if (!authuserDto.isResult()) {
+            return;
+        }
+
+        // user 찾기
+        String userId = authuserDto.getUserId();
+        User user = userRepository.findByUserId(userId);
+
+        // missionId 찾기
+        MissionEntity mission = missionRepository.findByMissionId(missionId);
+
+        // 해당 미션 데이터 찾기
+        UserMissionEntity userMission =
+                userMissionRepository.findByUserIdAndMissionIdAndLearn(user, mission, false);
+
+        if (userMission == null) {
+            System.out.println("학습 정보와 일치하는 유저 데이터가 없습니다.");
+            return;
+        }
+        userMission.setLearn(true);
+        userMissionRepository.save(userMission);
+
+    }
+
+
+    // 채팅창 : 프론트로 문장 전송
     public List<UserMissionDto> getUncompletedMissionsForUser(String accessToken, String refreshToken) {
         UserDto.AuthuserDto authuserDto = userService.authuser(accessToken, refreshToken);
         if (!authuserDto.isResult()) {
@@ -169,6 +197,7 @@ public class UserMissionService {
 //    }
 
 
+    // 채팅창 : 미션 문장 사용여부 판단 AI
     public String textPrompt(String data) throws IOException {
         String prompt = makePrompt(data);
         String instance =

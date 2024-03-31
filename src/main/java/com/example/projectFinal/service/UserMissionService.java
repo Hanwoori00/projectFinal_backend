@@ -300,7 +300,7 @@ public class UserMissionService {
 
 
     // 채팅창 : 미션 완료(대화 종료)
-    public void SetMissionCompleteForUSer(String accessToken, String refreshToken, String[] missionIds) {
+    public void SetMissionCompleteForUSer(String accessToken, String refreshToken, List<String> missionIds) {
         UserDto.AuthuserDto authuserDto = userService.authuser(accessToken, refreshToken);
         if (!authuserDto.isResult()) {
             return;
@@ -310,18 +310,22 @@ public class UserMissionService {
         String userId = authuserDto.getUserId();
         User user = userRepository.findByUserId(userId);
 
-        // missionIds 찾기
-        List<MissionEntity> missions = missionRepository.findByMissionIdIn(Arrays.asList(missionIds));
+        if (user != null) {
+            // 사용자와 미션 ID 목록을 기반으로 동적 쿼리 실행
+            List<UserMissionEntity> userMissions = userMissionRepository.findByUserIdAndMissionId_MissionIdIn(user, missionIds);
+            for (UserMissionEntity userMission : userMissions) {
+                userMission.setComplete(true);
+            }
+            userMissionRepository.saveAll(userMissions);
+        }
+    }
 
-        // 해당 데이터 찾기
-        List<UserMissionEntity> userMissions = userMissionRepository.findByUserIdAndMissionIdIn(user, missions);
 
-        // 미션 완료 처리
+    public void updateMissions(List<String> missionIds) {
+        List<UserMissionEntity> userMissions = userMissionRepository.findByMissionId_MissionIdIn(missionIds);
         for (UserMissionEntity userMission : userMissions) {
             userMission.setComplete(true);
-            // 변경사항 DB에 반영
-            userMissionRepository.save(userMission);
         }
-
+        userMissionRepository.saveAll(userMissions);
     }
 }

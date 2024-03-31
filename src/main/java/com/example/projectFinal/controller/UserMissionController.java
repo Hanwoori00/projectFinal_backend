@@ -65,6 +65,7 @@ public class UserMissionController {
 //        return ResponseEntity.ok().build();
 //    }
 
+    @CrossOrigin
     @PostMapping("/checkMission")
     public ResponseEntity<String> checkMission(@RequestBody String postData) throws IOException {
         System.out.println("Received data from client: " + postData);
@@ -78,11 +79,11 @@ public class UserMissionController {
 
 
     @PostMapping("/missionComplete")
-    public ResponseEntity<String> SetMissionCompleteForUSer(@RequestBody Map<String, String[]> request,
+    public ResponseEntity<String> SetMissionCompleteForUSer(@RequestBody Map<String, List<String>> request,
                                                        @CookieValue(name = "accessToken", required = false) String accessToken,
                                                        @CookieValue(name = "RefreshToken", required = false) String RefreshToken) {
         try {
-            String[] missionIds = request.get("mission_id");
+            List<String> missionIds = request.get("mission_id");
             userMissionService.SetMissionCompleteForUSer(accessToken, RefreshToken, missionIds);
             return ResponseEntity.ok("Learned missions marked successfully.");
 
@@ -90,5 +91,13 @@ public class UserMissionController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred while marking missions as learned.");
         }
+    }
+
+
+    @PostMapping("/testComplete")
+    public ResponseEntity<String> completeMissions(@RequestBody Map<String, List<String>> requestBody) {
+        List<String> missionIds = requestBody.get("missionId");
+        userMissionService.updateMissions(missionIds);
+        return ResponseEntity.status(HttpStatus.OK).body("Missions completed successfully.");
     }
 }

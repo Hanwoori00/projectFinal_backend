@@ -23,10 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class UserMissionService {
@@ -78,6 +75,7 @@ public class UserMissionService {
 
     }
 
+
     // 학습하기 : 프론트로 문장 전송
     public List<UserMissionDto> getUnLearnMissionsForUser(String course, String accessToken, String refreshToken) {
         UserDto.AuthuserDto authuserDto = userService.authuser(accessToken, refreshToken);
@@ -115,6 +113,7 @@ public class UserMissionService {
 
     }
 
+
     // 학습하기 : 학습 완료
     public void setLearnMissionsForUser(String accessToken, String refreshToken, String missionId) {
         UserDto.AuthuserDto authuserDto = userService.authuser(accessToken, refreshToken);
@@ -141,6 +140,7 @@ public class UserMissionService {
         userMissionRepository.save(userMission);
 
     }
+
 
 
     // 채팅창 : 프론트로 문장 전송
@@ -295,5 +295,31 @@ public class UserMissionService {
 
             return null;
         }
+    }
+
+
+    // 채팅창 : 미션 완료(대화 종료)
+    public void SetMissionCompleteForUSer(String accessToken, String refreshToken, String[] missionIds) {
+        UserDto.AuthuserDto authuserDto = userService.authuser(accessToken, refreshToken);
+        if (!authuserDto.isResult()) {
+            return;
+        }
+
+        // user 찾기
+        String userId = authuserDto.getUserId();
+        User user = userRepository.findByUserId(userId);
+
+        // missionIds 찾기
+        List<MissionEntity> missions = missionRepository.findByMissionIdIn(Arrays.asList(missionIds));
+
+        // 해당 데이터 찾기
+        List<UserMissionEntity> userMissions = userMissionRepository.findByUserIdAndMissionIdIn(user, missions);
+
+        // 미션 완료 처리
+        for (UserMissionEntity userMission : userMissions) {
+            userMission.setComplete(true);
+        }
+        // 변경사항 DB에 반영
+        userMissionRepository.saveAll(userMissions);
     }
 }

@@ -8,8 +8,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface UserMissionRepository extends JpaRepository<UserMissionEntity, Integer> {
-    List<UserMissionEntity> findByUserIdAndMissionId_Course(User userID, String course);
-    List<UserMissionEntity> findByUserIdAndCompleteAndLearn(User userId, boolean complete, boolean learn);
-    List<UserMissionEntity> findByUserIdAndLearnAndMissionId_Course(User usrId, boolean learn, String course);
-    UserMissionEntity findByUserIdAndMissionIdAndLearn(User userId, MissionEntity missionId, boolean learn);
+    List<UserMissionEntity> findByUserIdAndMissionId_Course(User user, String course);
+    List<UserMissionEntity> findByUserIdAndCompleteAndLearn(User user, boolean complete, boolean learn);
+    List<UserMissionEntity> findByUserIdAndLearnAndMissionId_Course(User user, boolean learn, String course);
+    UserMissionEntity findByUserIdAndMissionIdAndLearn(User user, MissionEntity mission, boolean learn);
+    List<UserMissionEntity> findByUserIdAndMissionIdIn(User user, List<MissionEntity> missions);
+
 }

@@ -13,4 +13,6 @@ public interface MissionRepository extends JpaRepository<MissionEntity, String> 
     List<MissionEntity> findByCourse(String course);
 
     MissionEntity findByMissionId(String missionId);
+
+    List<MissionEntity> findByMissionIdIn(List<String> missionIds);
 }

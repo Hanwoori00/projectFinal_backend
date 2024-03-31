@@ -320,7 +320,7 @@ public class UserMissionService {
         for (UserMissionEntity userMission : userMissions) {
             userMission.setComplete(true);
             // 변경사항 DB에 반영
-            userMissionRepository.saveAll(userMissions);
+            userMissionRepository.save(userMission);
         }
 
     }

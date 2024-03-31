@@ -3,6 +3,7 @@ package com.example.projectFinal.controller;
 import com.example.projectFinal.dto.UserMissionDto;
 import com.example.projectFinal.service.UserMissionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,5 +74,21 @@ public class UserMissionController {
         String response = userMissionService.textPrompt(postData);
 
         return ResponseEntity.ok(response);
+    }
+
+
+    @PostMapping("/missionComplete")
+    public ResponseEntity<String> SetMissionCompleteForUSer(@RequestBody Map<String, String[]> request,
+                                                       @CookieValue(name = "accessToken", required = false) String accessToken,
+                                                       @CookieValue(name = "RefreshToken", required = false) String RefreshToken) {
+        try {
+            String[] missionIds = request.get("mission_id");
+            userMissionService.SetMissionCompleteForUSer(accessToken, RefreshToken, missionIds);
+            return ResponseEntity.ok("Learned missions marked successfully.");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while marking missions as learned.");
+        }
     }
 }

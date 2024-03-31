@@ -32,7 +32,7 @@ public class PracticeService {
 
     public Map<String, Object> getPractice(String expression, String meaning, int level) throws IOException {
         //
-        GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
+        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("/home/ubuntu/.config/gcloud/application_default_credentials.json"));
         String oAuthToken = credentials.refreshAccessToken().getTokenValue();
         String baseUrl_text = "https://asia-northeast3-aiplatform.googleapis.com/v1/projects/teampj-final/locations/asia-northeast3/publishers/google/models/text-bison-32k:predict";
         WebClient textClient = WebClient.create(baseUrl_text);

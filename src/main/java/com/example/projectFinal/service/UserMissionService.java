@@ -319,8 +319,9 @@ public class UserMissionService {
         // 미션 완료 처리
         for (UserMissionEntity userMission : userMissions) {
             userMission.setComplete(true);
+            // 변경사항 DB에 반영
+            userMissionRepository.saveAll(userMissions);
         }
-        // 변경사항 DB에 반영
-        userMissionRepository.saveAll(userMissions);
+
     }
 }

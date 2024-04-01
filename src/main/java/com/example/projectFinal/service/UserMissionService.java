@@ -201,7 +201,7 @@ public class UserMissionService {
     public String textPrompt(String data) throws IOException {
         String prompt = makePrompt(data);
         String instance =
-                "{ \"prompt\": " + "\"Check which expression from the missions the chat corresponds to and return the corresponding mission_id(s) as an Array. (e.g. ['lv1_1', 'lv_2']) "+
+                "{ \"prompt\": " + "\"Check which expression from the missions the chat corresponds to and return the corresponding missionId(s) as an Array. (e.g. ['lv1_1', 'lv_2']) "+
                         "If no matching missions are found or if the chat sentence does not match the expression from any of the missions, return none in lower case." +
                         prompt + "\"}";
         String parameters =
@@ -230,9 +230,9 @@ public class UserMissionService {
 
             StringBuilder sb = new StringBuilder();
             for (JsonNode missionNode : jsonNode.get("missions")) {
-                String missionId = missionNode.get("mission_id").asText();
+                String missionId = missionNode.get("missionId").asText();
                 String mission = missionNode.get("mission").asText();
-                sb.append("mission_id: ").append(missionId).append("\n")
+                sb.append("missionId: ").append(missionId).append("\n")
                         .append("mission: ").append(mission).append("\n\n");
             }
 

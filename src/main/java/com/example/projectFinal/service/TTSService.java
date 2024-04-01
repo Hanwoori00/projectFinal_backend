@@ -46,7 +46,7 @@ public class TTSService {
             data.put("model_id", "eleven_turbo_v2");
             Map<String, Object> voiceSettings = new HashMap<>();
             voiceSettings.put("stability", 0.5);
-            voiceSettings.put("similarity_boost", 0.6);
+            voiceSettings.put("similarity_boost", 0.9);
             voiceSettings.put("style", 0.25);
             voiceSettings.put("use_speaker_boost", true);
             data.put("voice_settings", voiceSettings);

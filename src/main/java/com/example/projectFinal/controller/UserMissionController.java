@@ -83,7 +83,7 @@ public class UserMissionController {
                                                        @CookieValue(name = "accessToken", required = false) String accessToken,
                                                        @CookieValue(name = "RefreshToken", required = false) String RefreshToken) {
         try {
-            List<String> missionIds = request.get("mission_id");
+            List<String> missionIds = request.get("missionId");
             userMissionService.SetMissionCompleteForUSer(accessToken, RefreshToken, missionIds);
             return ResponseEntity.ok("Learned missions marked successfully.");
 

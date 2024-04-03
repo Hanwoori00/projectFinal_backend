@@ -45,7 +45,7 @@ public class PracticeService {
         String[] topics = {ai.topic0, ai.topic1, ai.topic2, ai.topic3, ai.topic4, ai.topic5, ai.topic6, ai.topic7, ai.topic8, ai.topic9};
         String topic = topics[second - 1];
 
-        String requestBody = "{\"instances\":[{\"content\":\"" +  ai.common_context1 + topic + ai.common_context2 + topic +  ai.common_context3 + expression + "\"}],\"parameters\":{\"maxOutputTokens\":8192,\"temperature\":0.1,\"topP\":1}}";
+        String requestBody = "{\"instances\":[{\"content\":\"" +  ai.common_context1 + topic + ai.common_context2 + topic +  ai.common_context3 + expression + "\"}],\"parameters\":{\"maxOutputTokens\":8192,\"temperature\":0.6,\"topP\":1}}";
         // 이후 코드는 동일하게 진행
         String response = textClient.post()
                 .header("Content-Type", "application/json")

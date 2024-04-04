@@ -16,8 +16,9 @@ import java.util.List;
 public class STTService {
 
     public String SpeechToText(MultipartFile audioFile) throws IOException {
-//        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("/home/ubuntu/.config/gcloud/application_default_credentials.json"));
 
+        // Google Cloud Speech-to-Text 사용 위한 사용자 인증
+        //
         GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("/home/ubuntu/.config/gcloud/application_default_credentials.json"))
                 .createScoped(Lists.newArrayList());
 
@@ -28,10 +29,10 @@ public class STTService {
             ByteString audioBytes = ByteString.copyFrom(data);
 
             RecognitionConfig config = RecognitionConfig.newBuilder()
-                    .setEncoding(RecognitionConfig.AudioEncoding.ENCODING_UNSPECIFIED)
-                    .setLanguageCode("en-US")
-                    .setSampleRateHertz(48000)
-                    .setEnableAutomaticPunctuation(true)
+                    .setEncoding(RecognitionConfig.AudioEncoding.ENCODING_UNSPECIFIED) // 제공된 오디오의 인코딩
+                    .setLanguageCode("en-US") // 제공된 오디오의 음성 인식에 사용할 언어와 리전/지역
+                    .setSampleRateHertz(48000) // 제공된 오디오의 샘플링 레이트 지정
+                    .setEnableAutomaticPunctuation(true) // 자동 구두점 가져오기
                     .build();
 
             RecognitionAudio audio = RecognitionAudio.newBuilder()
@@ -48,6 +49,8 @@ public class STTService {
 //                transcription.append(alternative.getTranscript());
 
                 String transcript = alternative.getTranscript();
+
+                // 첫 글자 대문자로 변환
                 transcript = Character.toUpperCase(transcript.charAt(0)) + transcript.substring(1);
                 transcription.append(transcript);
             }

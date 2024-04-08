@@ -94,6 +94,7 @@ public class UserMissionService {
             return Collections.emptyList();
         }
 
+        // 랜덤 3 개
         Collections.shuffle(unLearnMissions);
         List<UserMissionEntity> limitedUnlearnMissions = unLearnMissions.stream().limit(3).toList();
 
@@ -162,6 +163,7 @@ public class UserMissionService {
             return Collections.emptyList();
         }
 
+        // 랜덤 3 개
         Collections.shuffle(unusedMissions);
         List<UserMissionEntity> limitedUnusedMissions = unusedMissions.stream().limit(3).toList();
 
@@ -198,6 +200,9 @@ public class UserMissionService {
 
 
     // 채팅창 : 미션 문장 사용여부 판단 AI
+    // Vertex AI API 사용 설정, build.gradle 종속 항목 추가 필요
+    // https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/text?hl=ko#generative-ai-text-prompt-java
+    // https://cloud.google.com/vertex-ai/docs/start/client-libraries?hl=ko
     public String textPrompt(String data) throws IOException {
         String prompt = makePrompt(data);
         String instance =
@@ -211,12 +216,12 @@ public class UserMissionService {
                         + "  \"topP\": 0.95,\n"
                         + "  \"topK\": 1\n"
                         + "}";
-        String project = "teampj-final";
+        String project = "teampj-final"; // Google Cloud Console 에서 본인 프로젝트 이름 확인
         String location = "asia-northeast3";
         String publisher = "google";
-        String model = "text-bison@002";
+        String model = "text-bison@002"; // 사용할 AI 모델
 
-        // 인증 파일의 경로를 설정합니다.
+        // 인증 파일의 경로
         String credentialsPath = "/home/ubuntu/.config/gcloud/application_default_credentials.json";
 
         return predictTextPrompt(instance, parameters, project, location, publisher, model, credentialsPath);
@@ -248,6 +253,17 @@ public class UserMissionService {
             return null;
         }
 
+    // JSON 데이터를 이런 형식의 문자열로 만들기 위한 작업
+//        missionId: lv1_1
+//        mission: I am trying to
+//
+//        missionId: lv1_2
+//        mission: I am ready to
+//
+//        missionId: lv1_3
+//        mission: I am just about to
+//
+//        chat: I'm trying to
     }
     public String predictTextPrompt(
             String instance,
@@ -258,7 +274,7 @@ public class UserMissionService {
             String model,
             String credentialsPath
     ) throws IOException {
-        // PredictionServiceClient를 생성하기 위한 설정을 구성합니다.
+        // PredictionServiceClient 를 생성하기 위한 설정
         PredictionServiceSettings predictionServiceSettings =
                 PredictionServiceSettings.newBuilder()
                         .setEndpoint(location + "-aiplatform.googleapis.com:443")
@@ -311,7 +327,7 @@ public class UserMissionService {
         User user = userRepository.findByUserId(userId);
 
         if (user != null) {
-            // 사용자와 미션 ID 목록을 기반으로 동적 쿼리 실행
+            // 사용자와 미션 ID 목록을 기반으로 데이터 찾기
             List<UserMissionEntity> userMissions = userMissionRepository.findByUserIdAndMissionId_MissionIdIn(user, missionIds);
             for (UserMissionEntity userMission : userMissions) {
                 userMission.setComplete(true);

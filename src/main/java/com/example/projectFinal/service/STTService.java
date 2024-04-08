@@ -18,7 +18,15 @@ public class STTService {
     public String SpeechToText(MultipartFile audioFile) throws IOException {
 
         // Google Cloud Speech-to-Text 사용 위한 사용자 인증
-        //
+        // Google Cloud 가입, 프로젝트 생성, Speech-to-Text 사용 설정 필요, 서비스 계정 키 파일 생성 필요
+        // https://cloud.google.com/docs/authentication/provide-credentials-adc?hl=ko
+        // 서비스 계정 키 파일 Google Cloud Console(웹페이지)에서 생성하는게 더 편리합니다!
+        // 서비스 계정 키 파일의 경로 OR gcloud cli 설치 후 생성한 사용자 인증 정보 파일의 경로를
+        // new FileInputStream() 내부에 입력
+
+        // build.gradle 에 라이브러리 추가 필요
+        // https://cloud.google.com/speech-to-text/docs/transcribe-client-libraries?hl=ko#client-libraries-usage-java
+
         GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("/home/ubuntu/.config/gcloud/application_default_credentials.json"))
                 .createScoped(Lists.newArrayList());
 

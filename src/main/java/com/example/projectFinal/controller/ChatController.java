@@ -29,18 +29,18 @@ public class ChatController {
         TTSservice = ttSservice;
     }
 
-    @PostMapping("/checkMission")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> CheckMission(@RequestBody ChatDto chatDto) {
-        Map<String, Object> responseBody = chatService.missionCheck(chatDto);
-        return ResponseEntity.ok(responseBody);
-    }
-    @PostMapping("/createConnection")
-    @ResponseBody
-    public String CreateConnection() throws IOException {
-        chatService.createConnection();
-        return "Connection created successfully";
-    }
+//    @PostMapping("/checkMission")
+//    @ResponseBody
+//    public ResponseEntity<Map<String, Object>> CheckMission(@RequestBody ChatDto chatDto) {
+//        Map<String, Object> responseBody = chatService.missionCheck(chatDto);
+//        return ResponseEntity.ok(responseBody);
+//    }
+//    @PostMapping("/createConnection")
+//    @ResponseBody
+//    public String CreateConnection() throws IOException {
+//        chatService.createConnection();
+//        return "Connection created successfully";
+//    }
     @PostMapping("/getCorrection")
     @ResponseBody
     public String[] GecCorrection(@RequestBody ChatDto chatDto) {
@@ -59,7 +59,7 @@ public class ChatController {
         UserDto.SendChatDto sendChatDto = new UserDto.SendChatDto();
 
         try {
-            this.chatService.createConnection();
+//            this.chatService.createConnection();
 
             System.out.println("sendChat 토큰 확인 " + accessToken + RefreshToken);
 

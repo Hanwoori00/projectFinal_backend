@@ -1,21 +1,40 @@
 package com.example.projectFinal.service;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class PracticeAi {
-    public String topic1, topic2 = """
-            주제는 남녀간의 사랑과 관계 되어야 해.
-            """;
-    public String topic3, topic4 = """
-            주제는 가족과 관계 되어야 해.
-            """;
-    public String topic5, topic6 = """
-            주제는 학교생활과 관계 되어야 해.
-            """;
-    public String topic7, topic8 = """
-            주제는 직장 생활과 관계 되어야 해.
-            """;
-    public String topic9, topic0 = """
+    public String topic0 = """
             주제는 취미와 관계 되어야 해.
             """;
+    public String topic1 = """
+            주제는 남녀간의 사랑과 관계 되어야 해.
+            """;
+    public String topic2 = """
+            주제는 쇼핑과 관계 되어야 해.
+            """;
+    public String topic3= """
+            주제는 친구와 관계 되어야 해.
+            """;
+    public String topic4 = """
+            주제는 최근 일어나는 이슈(news)와 관계 되어야 해.
+            """;
+    public String topic5 = """
+            주제는 정치와 관계 되어야 해.
+            """;
+    public String topic6 = """
+            주제는 음식과 관계 되어야 해.
+            """;
+    public String topic7 = """
+            주제는 가족과 관계 되어야 해.
+            """;
+    public String topic8 = """
+            주제는 학교생활과 관계 되어야 해.
+            """;
+    public String topic9 = """
+            주제는 직장생활과 관계 되어야 해.
+            """;
+
     public String common_context1 = """
 너에게 영어 표현을 줄거야. 
 이 영어표현을 통해 영어 회화 공부를 하는데 도움이 되는 문장과 대화를 나에게 넘겨줘.

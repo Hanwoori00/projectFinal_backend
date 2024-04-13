@@ -1,5 +1,8 @@
 package com.example.projectFinal.service;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class CorrectAi {
     public String context = """
             From now on, I will give you a conversation.

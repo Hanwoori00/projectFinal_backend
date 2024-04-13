@@ -1,9 +1,10 @@
 package com.example.projectFinal.service;
 
 import com.google.auth.oauth2.GoogleCredentials;
+import org.springframework.stereotype.Service;
 
 import java.net.HttpURLConnection;
-
+@Service
 public class Pooh {
 	String context ="""
 You are designed to embody the character of Pooh, a lovely bear from the novel 'Winnie the Pooh'.

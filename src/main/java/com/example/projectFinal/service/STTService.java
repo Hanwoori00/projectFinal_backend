@@ -37,7 +37,7 @@ public class STTService {
             ByteString audioBytes = ByteString.copyFrom(data);
 
             RecognitionConfig config = RecognitionConfig.newBuilder()
-                    .setEncoding(RecognitionConfig.AudioEncoding.ENCODING_UNSPECIFIED) // 제공된 오디오의 인코딩
+                    .setEncoding(RecognitionConfig.AudioEncoding.WEBM_OPUS) // 제공된 오디오의 인코딩
                     .setLanguageCode("en-US") // 제공된 오디오의 음성 인식에 사용할 언어와 리전/지역
                     .setSampleRateHertz(48000) // 제공된 오디오의 샘플링 레이트 지정
                     .setEnableAutomaticPunctuation(true) // 자동 구두점 가져오기
@@ -58,7 +58,7 @@ public class STTService {
 
                 String transcript = alternative.getTranscript();
 
-                // 첫 글자 대문자로 변환
+                // 변환된 데이터의 첫 글자 대문자로 변환
                 transcript = Character.toUpperCase(transcript.charAt(0)) + transcript.substring(1);
                 transcription.append(transcript);
             }

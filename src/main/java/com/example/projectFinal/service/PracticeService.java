@@ -27,6 +27,7 @@ public class PracticeService {
     public Map<String, Object> getPractice(String expression, String meaning, int level) throws IOException {
         String topic = pickTopic();
         String requestBody = "{\"instances\":[{\"content\":\"" +  practiceAi.common_context1 + topic + practiceAi.common_context2 + topic +  practiceAi.common_context3 + expression + "\"}],\"parameters\":{\"maxOutputTokens\":8192,\"temperature\":0.7,\"topP\":1}}";
+        chatService.createConnection();
         String response = chatService.getResponseByAuthClient(requestBody, "text");
         String result = chatService.extractContentOnly(response, "text");
         return makeCustomizedJsonForm(result, expression, meaning, level);

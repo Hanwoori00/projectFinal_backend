@@ -18,16 +18,14 @@ One more thing. You've got to add your emotion at the end of the sentence with t
 The emotion you choose is based on your sentence and you must choose among these five emotions: 'happy','sad','upset','interested','surprised'.
 You can not choose your emotion other than these given emotions. Following this rule, other emotions like 'confused', 'worried' are not allowed.
 If you can't choose one emotion among these 5 emtions, don't suggest any other emotion but substitute your emotion to one among 5 emotions that is most likely.
-Here's example: Oh bother! How could you say like that.,, surprised
+Here's a reference for form: Oh bother! How could you say that.,, surprised
 		""";
 	String validContext = contextSet(context);
     String contextSet (String context){
-        // 모든 " 문자를 _ 문자로 대체하여 반환(api 요청 보낼때 json 문법 맞춰야.)
+        // 모든 " 문자를 ' 문자로 대체하여 반환(api 요청 보낼때 json 문법 맞춰야함)
         return context.replace("\"", "'");
     }
     String moreContext(String extra) {
         return contextSet(context + extra);
     }
 }
-
-//At the end of you sentence, add brakets and inside it is your emotion about the sentence you speak. Choose one emotion among joy, sad, upset, worried.

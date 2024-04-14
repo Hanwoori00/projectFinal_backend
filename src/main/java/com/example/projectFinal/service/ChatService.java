@@ -24,6 +24,7 @@ public class ChatService {
 	WebClient chatAuthClient;
 	WebClient textAuthClient;
 
+	long lastTokenRefreshTime;
 	@Autowired
 	Pooh pooh;
 	@Autowired
@@ -37,21 +38,26 @@ public class ChatService {
 	}
 
 	public void createConnection() throws IOException {
-		// 서버 코드
-		GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("/home/ubuntu/.config/gcloud/application_default_credentials.json"));
-		// 로컬 코드
-//		GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
-		oAuthToken = credentials.refreshAccessToken().getTokenValue();
-		String baseUrl_chat = "https://asia-northeast3-aiplatform.googleapis.com/v1/projects/teampj-final/locations/asia-northeast3/publishers/google/models/chat-bison:predict";
-		String baseUrl_text = "https://asia-northeast3-aiplatform.googleapis.com/v1/projects/teampj-final/locations/asia-northeast3/publishers/google/models/text-bison-32k:predict";
-		chatAuthClient = WebClient.create(baseUrl_chat);
-		textAuthClient = WebClient.create(baseUrl_text);
+		long currentTime = System.currentTimeMillis();
+		if (lastTokenRefreshTime == 0L || currentTime - lastTokenRefreshTime > 3600000) {
+			// 서버 코드
+			GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("/home/ubuntu/.config/gcloud/application_default_credentials.json"));
+			// 로컬 코드
+			//GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
+			oAuthToken = credentials.refreshAccessToken().getTokenValue();
+			lastTokenRefreshTime = System.currentTimeMillis();
+			String baseUrl_chat = "https://asia-northeast3-aiplatform.googleapis.com/v1/projects/teampj-final/locations/asia-northeast3/publishers/google/models/chat-bison:predict";
+			String baseUrl_text = "https://asia-northeast3-aiplatform.googleapis.com/v1/projects/teampj-final/locations/asia-northeast3/publishers/google/models/text-bison-32k:predict";
+			chatAuthClient = WebClient.create(baseUrl_chat);
+			textAuthClient = WebClient.create(baseUrl_text);
+		}
 	}
 
-	public ChatDto getAnswer(ChatDto chatDto) {
+	public ChatDto getAnswer(ChatDto chatDto) throws IOException {
 		String[] messages = chatDto.getMessages();
 		String msgQuery = makeMessagesQuery(messages);
 		String requestBody = "{\"instances\": [{\"context\": \"" + pooh.validContext + "\",\"messages\": [" + msgQuery + "]}],\"parameters\": {\"temperature\": 0.3,\"maxOutputTokens\": 200,\"topP\": 0.8,\"topK\": 40}}";
+		createConnection();
 		String response = getResponseByAuthClient(requestBody, "chat");
 		String content = extractContentOnly(response, "chat");
 		String splits[] = content.split(",, ");
@@ -60,7 +66,8 @@ public class ChatService {
 		return chatDto;
 	}
 
-	public String[] getCorrection(ChatDto chatDto) {
+	public String[] getCorrection(ChatDto chatDto) throws IOException {
+		createConnection();
 		String[] messages = chatDto.getMessages();
 		String stringifiedMessages = stringifyMessage(messages);
 		String requestBody = "{\"instances\":[{\"content\":\"" + correctAi.context + stringifiedMessages + "\"}],\"parameters\":{\"maxOutputTokens\":8192,\"temperature\":0.5,\"topP\":1}}";

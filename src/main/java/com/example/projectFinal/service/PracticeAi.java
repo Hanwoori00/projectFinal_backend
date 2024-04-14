@@ -2,6 +2,8 @@ package com.example.projectFinal.service;
 
 import org.springframework.stereotype.Service;
 
+
+// 클라이언트가 새로 고침을 누를때마다 다른 토픽의 예시가 나오도록 요청.
 @Service
 public class PracticeAi {
     public String topic0 = """

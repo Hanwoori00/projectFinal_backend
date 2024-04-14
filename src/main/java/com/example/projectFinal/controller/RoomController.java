@@ -1,5 +1,4 @@
 package com.example.projectFinal.controller;
-import com.example.projectFinal.dto.ChatDto;
 import com.example.projectFinal.dto.UserDto;
 import com.example.projectFinal.entity.Room;
 import com.example.projectFinal.service.MessageService;
@@ -11,11 +10,7 @@ import com.example.projectFinal.service.RoomService;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -60,33 +55,3 @@ public class RoomController {
         return newRoom.getId();
     }
 }
-
-
-//
-//
-//
-//@Controller
-//public class UserController {
-//
-//    @Autowired
-//    UserService userService;
-//
-//    @GetMapping("/")
-//    public String getUsers(Model model) {
-//        List<UserDTO> users = userService.getUserList();
-//        model.addAttribute("list", users);
-//        return "user";
-//    }
-//
-////    @GetMapping("/searchUserByName")
-////    public String searchUsers(Model model) {
-////
-////    }
-//
-//    @PostMapping("/insert")
-//    @ResponseBody
-//    public String insertUser(@RequestBody UserEntity user) {
-//        String newName = userService.insertUser(user);
-//        return newName + "Success";
-//    }
-//}

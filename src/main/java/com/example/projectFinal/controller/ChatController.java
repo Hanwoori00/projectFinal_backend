@@ -6,14 +6,12 @@ import com.example.projectFinal.dto.UserDto;
 import com.example.projectFinal.service.ChatService;
 import com.example.projectFinal.service.TTSService;
 import com.example.projectFinal.service.UserService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/chat")
@@ -29,21 +27,9 @@ public class ChatController {
         TTSservice = ttSservice;
     }
 
-//    @PostMapping("/checkMission")
-//    @ResponseBody
-//    public ResponseEntity<Map<String, Object>> CheckMission(@RequestBody ChatDto chatDto) {
-//        Map<String, Object> responseBody = chatService.missionCheck(chatDto);
-//        return ResponseEntity.ok(responseBody);
-//    }
-//    @PostMapping("/createConnection")
-//    @ResponseBody
-//    public String CreateConnection() throws IOException {
-//        chatService.createConnection();
-//        return "Connection created successfully";
-//    }
     @PostMapping("/getCorrection")
     @ResponseBody
-    public String[] GecCorrection(@RequestBody ChatDto chatDto) {
+    public String[] GecCorrection(@RequestBody ChatDto chatDto) throws IOException {
         return chatService.getCorrection(chatDto);
     }
     @GetMapping("/testPage")
@@ -59,8 +45,6 @@ public class ChatController {
         UserDto.SendChatDto sendChatDto = new UserDto.SendChatDto();
 
         try {
-//            this.chatService.createConnection();
-
             System.out.println("sendChat 토큰 확인 " + accessToken + RefreshToken);
 
             UserDto.AuthuserDto authuser = this.userService.authuser(accessToken, RefreshToken);

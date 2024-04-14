@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MessageService {
-
     @Autowired
     MessageRepository messageRepository;
 
@@ -37,7 +36,6 @@ public class MessageService {
                 temp.setContent(content[1]);
                 temp.setGrammarValid(true);
             }
-            System.out.println("what?????????"+temp);
             messageRepository.save(temp);
         }
     };
